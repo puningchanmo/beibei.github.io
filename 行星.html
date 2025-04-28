@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>太阳系动态轨道模拟器</title>
+    <style>
+        /* 基础样式 */
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+            background: #0d1117;
+        }
+        .controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+        }
+        .controls button,
+        .controls input {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .controls span {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="toggleAnimation()">▶/⏸</button>
+        <input type="range" min="0.5" max="2" step="0.1" value="1" onchange="setSpeed(this.value)">
+        <span>速度倍率: x<span id="speedDisplay">1</span></span>
+    </div>
+    <canvas id="solar-system"></canvas>
+
+    <script>
+        let canvas = document.getElementById('solar-system');
+        let ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let centerX = width / 2;
+        let centerY = height / 2;
+        let animationFrame = null;
+        let isPlaying = false;
+        let speedMultiplier = 1;
+        
+        // 行星数据（完整版）
+        const planets = [
+            { 
+                name: '水星', 
+                radius: 3, 
+                orbitRadius: 50, 
+                speed: 0.005, 
+                color: '#808080',
+                rotationSpeed: 0.001 
+            },
+            { 
+                name: '金星', 
+                radius: 4, 
+                orbitRadius: 80, 
+                speed: 0.0035, 
+                color: '#fff1c7',
+                rotationSpeed: 0.0008 
+            },
+            { 
+                name: '地球', 
+                radius: 5, 
+                orbitRadius: 110, 
+                speed: 0.0028, 
+                color: '#43a0f5',
+                rotationSpeed: 0.0007 
+            },
+            { 
+                name: '火星', 
+                radius: 4, 
+                orbitRadius: 140, 
+                speed: 0.002, 
+                color: '#e57373',
+                rotationSpeed: 0.0006 
+            },
+            { 
+                name: '木星', 
+                radius: 10, 
+                orbitRadius: 180, 
+                speed: 0.0012, 
+                color: '#a1887f',
+                rotationSpeed: 0.0005 
+            },
+            { 
+                name: '土星', 
+                radius: 8, 
+                orbitRadius: 220, 
+                speed: 0.0009, 
+                color: '#fdd835',
+                rotationSpeed: 0.0004 
+            },
+            { 
+                name: '天王星', 
+                radius: 6, 
+                orbitRadius: 260, 
+                speed: 0.0007, 
+                color: '#4db6ac',
+                rotationSpeed: 0.0003 
+            },
+            { 
+                name: '海王星', 
+                radius: 6, 
+                orbitRadius: 300, 
+                speed: 0.0005, 
+                color: '#42a5f5',
+                rotationSpeed: 0.0002 
+            }
+        ];
+
+        // 动画核心函数
+        function drawSun() {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, Math.PI*2);
+            let gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 20);
+            gradient.addColorStop(0, '#ffbd4d');
+            gradient.addColorStop(1, '#ff4d00');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawOrbits() {
+            ctx.strokeStyle = '#616161';
+            ctx.lineWidth = 0.5;
+            planets.forEach(planet => {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, planet.orbitRadius, 0, Math.PI*2);
+                ctx.stroke();
+            });
+        }
+
+        function updatePlanets() {
+            planets.forEach(planet => {
+                planet.angle = (planet.angle || 0) + planet.speed * speedMultiplier;
+                planet.rotationAngle = (planet.rotationAngle || 0) + planet.rotationSpeed;
+            });
+        }
+
+        function drawPlanets() {
+            planets.forEach(planet => {
+                let x = centerX + planet.orbitRadius * Math.cos(planet.angle);
+                let y = centerY + planet.orbitRadius * Math.sin(planet.angle);
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(planet.rotationAngle);
+                ctx.beginPath();
+                ctx.arc(0, 0, planet.radius, 0, Math.PI*2);
+                ctx.fillStyle = planet.color;
+                ctx.fill();
+                ctx.restore();
+                
+                // 显示名称标签
+                ctx.font = '12px Arial';
+                ctx.fillStyle = 'white';
+                ctx.fillText(planet.name, x + planet.radius + 5, y + 3);
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            drawSun();
+            drawOrbits();
+            updatePlanets();
+            drawPlanets();
+            animationFrame = requestAnimationFrame(animate);
+        }
+
+        // 控制函数
+        function toggleAnimation() {
+            if (isPlaying) {
+                cancelAnimationFrame(animationFrame);
+            } else {
+                animate();
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function setSpeed(value) {
+            speedMultiplier = parseFloat(value);
+            document.getElementById('speedDisplay').textContent = value;
+        }
+
+        // 响应窗口大小变化
+        window.addEventListener('resize', () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            centerX = width / 2;
+            centerY = height / 2;
+        });
+
+        // 初始化
+        window.addEventListener('load', () => {
+            canvas.width = width;
+            canvas.height = height;
+            planets.forEach(planet => planet.angle = 0);
+            animate();
+        });
+    </script>
+</body>
+</html>
