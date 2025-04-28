@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词卡片学习</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .card-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .nav-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: #45a049;
+        }
+        
+        .section {
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .highlight {
+            color: #e74c3c;
+        }
+        
+        .freq-red { background-color: #ff4d4d; padding: 2px 5px; border-radius: 3px; }
+        .freq-blue { background-color: #3498db; padding: 2px 5px; border-radius: 3px; }
+        
+        .example {
+            margin-left: 20px;
+            list-style-type: none;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="nav-buttons">
+            <button class="nav-button" onclick="prevCard()">&lt; 上一个单词</button>
+            <div id="currentWord" class="current-word"></div>
+            <button class="nav-button" onclick="nextCard()">下一个单词 &gt;</button>
+        </div>
+
+        <div id="cardContent" class="card-content">
+            <!-- 单词卡片内容将在此动态加载 -->
+        </div>
+    </div>
+
+    <script>
+        // 单词数据集合（示例包含两个单词）
+        const words = [
+            {
+                word: "classmate",
+                info: {
+                    pronunciation: "/ˈklæs.meɪt/",
+                    pos: "n. 同学",
+                    freq: "🔵高频",
+                    usage: "[日常常用，学校场景核心词汇]"
+                },
+                quick: {
+                    root: "class（班级）",
+                    suffix: "-mate（伙伴）",
+                    formula: "class + mate → 同学"
+                },
+                roots: {
+                    root: "class = 班级 🔵",
+                    examples: [
+                        "classroom（教室）",
+                        "classwork（课堂作业）"
+                    ]
+                },
+                suffixes: {
+                    suffix: "-mate = 伙伴 🔵",
+                    examples: [
+                        "teammate（队友）",
+                        "roommate（室友）"
+                    ]
+                },
+                examples: [
+                    "classmate from China → 来自中国的同学",
+                    "share homework with classmates → 和同学分享作业",
+                    "become friends with classmates → 和同学成为朋友"
+                ],
+                tips: {
+                    memory: "拆分法：class + mate → 班级伙伴 = 同学",
+                    caution: "classmate ≠ friend（同学不一定是朋友）"
+                }
+            },
+			{
+				word: "student",
+				info: {
+					pronunciation: "/ˈstuː.dənt/",
+					pos: "n. 学生",
+					freq: "🔵高频",
+					usage: "[学校场景核心词汇]"
+				},
+				quick: {
+					root: "stud（学习）",
+					suffix: "-ent（名词后缀）",
+					formula: "学习的人 → 学生"
+				},
+				roots: {
+					root: "stud = 学习 🔵",
+					examples: ["study", "student"]
+				},
+				suffixes: {
+					suffix: "-ent = 名词后缀 🔵",
+					examples: ["student", "agent"]
+				},
+				examples: [
+					"primary student → 小学生",
+					"high school student → 高中生"
+				],
+				tips: {
+					memory: "联想记忆：study（学习） + -ent → 学习的人 = 学生",
+					caution: "student ≠ teacher（学生 vs 教师）"
+				}
+			},
+			// Unit 3 完整数据
+			{
+				word: "brother",
+				info: {
+					pronunciation: "/ˈbrʌðər/",
+					pos: "n. 兄弟",
+					freq: "🔴极高频",
+					usage: "[家庭场景核心词汇]"
+				},
+				quick: {
+					root: "bro（兄弟）",
+					suffix: "-ther（关系后缀）",
+					formula: "兄弟关系 → 兄弟"
+				},
+				roots: {
+					root: "bro = 兄弟 🔴",
+					examples: ["brother", "brotherhood"]
+				},
+				suffixes: {
+					suffix: "-ther = 关系后缀 🔴",
+					examples: ["brother", "sister"]
+				},
+				examples: [
+					"older brother → 哥哥",
+					"young brother → 弟弟"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘布瑟’ → 兄弟的昵称",
+					caution: "brother ≠ sister（注意性别区分）"
+				}
+			},
+			// Unit 2 剩余单词示例
+            {
+                word: "China",
+                info: {
+                    pronunciation: "/ˈtʃaɪnə/",
+                    pos: "n. 中国",
+                    freq: "🔴极高频",
+                    usage: "[国家名称，地理核心词汇]"
+                },
+                quick: {
+                    root: "拉丁语 Sinae（源于‘秦’朝发音）",
+                    suffix: "",
+                    formula: "古代对中国的称呼"
+                },
+                roots: {
+                    root: "China = 中国 🔴",
+                    examples: ["Chinese", "China-made"]
+                },
+                suffixes: {
+                    suffix: "-ese = 国家后缀 🔴",
+                    examples: ["Chinese", "Japanese"]
+                },
+                examples: [
+                    "from China → 来自中国",
+                    "visit China → 访问中国"
+                ],
+                tips: {
+                    memory: "谐音记忆：发音类似‘吃尼亚’ → 想象吃中餐的场景",
+                    caution: "China ≠ Canadian（注意拼写无‘n’）"
+                }
+            },
+			// Unit 3 核心单词示例
+            {
+                word: "family",
+                info: {
+                    pronunciation: "/ˈfæm.ə.li/",
+                    pos: "n. 家庭",
+                    freq: "🔴极高频",
+                    usage: "[日常常用，家庭场景核心词汇]"
+                },
+                quick: {
+                    root: "fam（家族）",
+                    suffix: "-ily = 集合后缀",
+                    formula: "家族的集合 → 家庭"
+                },
+                roots: {
+                    root: "fam = 家族 🔴",
+                    examples: ["family", "familiar"]
+                },
+                suffixes: {
+                    suffix: "-ily = 集合后缀 🔴",
+                    examples: ["family", "society"]
+                },
+                examples: [
+                    "big family → 大家庭",
+                    "my family → 我的家庭"
+                ],
+                tips: {
+                    memory: "联想记忆：fam（爸爸） + ily（爱） → 爸爸的爱 = 家庭",
+                    caution: "family ≠ families（复数形式加-es）"
+                }
+            },
+			        // 季节与天气相关
+			{
+				word: "autumn",
+				info: {
+					pronunciation: "/ˈɔːtəm/",
+					pos: "n. 秋天",
+					freq: "🔴极高频",
+					usage: "[季节核心词汇]"
+				},
+				quick: {
+					root: "拉丁语 autumnus（丰收季节）",
+					suffix: "",
+					formula: "秋季的名称"
+				},
+				roots: {
+					root: "autumn = 秋天 🔴",
+					examples: ["autumn leaves", "autumn harvest"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"It's autumn now → 现在是秋天",
+					"Autumn is cool → 秋天很凉爽"
+				],
+				tips: {
+					memory: "联想记忆：发音类似‘奥特曼’ → 秋天的象征",
+					caution: "autumn ≠ fall（美式英语用fall）"
+				}
+			},
+			{
+				word: "spring",
+				info: {
+					pronunciation: "/sprɪŋ/",
+					pos: "n. 春天",
+					freq: "🔴极高频",
+					usage: "[季节核心词汇]"
+				},
+				quick: {
+					root: "spring（生长）",
+					suffix: "",
+					formula: "万物生长的季节 → 春天"
+				},
+				roots: {
+					root: "spring = 生长 🔴",
+					examples: ["spring flowers", "spring rain"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Spring comes early → 春天来得早",
+					"Spring is warm → 春天温暖"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘斯普林’ → 春天的名字",
+					caution: "spring ≠ summer（注意季节顺序）"
+				}
+			},
+			// 天气相关
+			{
+				word: "cloudy",
+				info: {
+					pronunciation: "/ˈklaʊdi/",
+					pos: "adj. 多云的",
+					freq: "🔵高频",
+					usage: "[天气描述核心词汇]"
+				},
+				quick: {
+					root: "cloud（云）",
+					suffix: "-y（形容词后缀）",
+					formula: "充满云 → 多云的"
+				},
+				roots: {
+					root: "cloud = 云 🔵",
+					examples: ["cloudy day", "cloud cover"]
+				},
+				suffixes: {
+					suffix: "-y = 形容词后缀 🔵",
+					examples: ["cloudy", "rainy"]
+				},
+				examples: [
+					"It's cloudy today → 今天多云",
+					"Cloudy skies → 多云的天空"
+				],
+				tips: {
+					memory: "拆分法：cloud + -y → 多云的",
+					caution: "cloudy ≠ sunny（注意天气差异）"
+				}
+			},
+			{
+				word: "sunny",
+				info: {
+					pronunciation: "/ˈsʌni/",
+					pos: "adj. 晴朗的",
+					freq: "🔴极高频",
+					usage: "[天气描述核心词汇]"
+				},
+				quick: {
+					root: "sun（太阳）",
+					suffix: "-y（形容词后缀）",
+					formula: "充满阳光 → 晴朗的"
+				},
+				roots: {
+					root: "sun = 太阳 🔴",
+					examples: ["sunny day", "sunlight"]
+				},
+				suffixes: {
+					suffix: "-y = 形容词后缀 🔴",
+					examples: ["sunny", "windy"]
+				},
+				examples: [
+					"A sunny afternoon → 晴朗的下午",
+					"Sunny weather → 晴朗的天气"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘桑尼’ → 晴朗的名字",
+					caution: "sunny ≠ rainy（注意天气差异）"
+				}
+			},
+			// 时间与日常活动
+			{
+				word: "every day",
+				info: {
+					pronunciation: "/ˈevri ˈdeɪ/",
+					pos: "短语 每天",
+					freq: "🔴极高频",
+					usage: "[时间频率核心短语]"
+				},
+				quick: {
+					root: "every（每个） + day（天）",
+					suffix: "",
+					formula: "每个天 → 每天"
+				},
+				roots: {
+					root: "every = 每个 🔴",
+					examples: ["every week", "every year"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I eat breakfast every day → 我每天吃早餐",
+					"Practice every day → 每天练习"
+				],
+				tips: {
+					memory: "直接翻译：every（每个） + day（天） = 每天",
+					caution: "every day ≠ everyday（后者是形容词）"
+				}
+			},
+			{
+				word: "get up",
+				info: {
+					pronunciation: "/ɡɛt ʌp/",
+					pos: "短语 起床",
+					freq: "🔴极高频",
+					usage: "[日常动作核心短语]"
+				},
+				quick: {
+					root: "get（获得） + up（起来）",
+					suffix: "",
+					formula: "获得起床 → 起床"
+				},
+				roots: {
+					root: "get = 获得 🔴",
+					examples: ["get ready", "get started"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I get up at 7 AM → 我早上7点起床",
+					"Don't get up yet → 先别起床"
+				],
+				tips: {
+					memory: "联想记忆：get up → 起身起床",
+					caution: "get up ≠ get down（上下方向不同）"
+				}
+			},
+			// 数字与数量
+			{
+				word: "thirty",
+				info: {
+					pronunciation: "/ˈθɜːrti/",
+					pos: "num. 三十",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "thir（来自three） + ty（十倍）",
+					suffix: "",
+					formula: "三的十倍 → 三十"
+				},
+				roots: {
+					root: "thir = three 🔴",
+					examples: ["thirty", "thirteenth"]
+				},
+				suffixes: {
+					suffix: "-ty = 十倍 🔴",
+					examples: ["twenty", "forty"]
+				},
+				examples: [
+					"Thirty students → 三十名学生",
+					"Thirty minutes → 三十分钟"
+				],
+				tips: {
+					memory: "拆分法：thir（三） + ty（十倍） = 三十",
+					caution: "thirty ≠ fourteen（注意数字混淆）"
+				}
+			},
+			// 动词短语
+			{
+				word: "fly a kite",
+				info: {
+					pronunciation: "/flaɪ ə kaɪt/",
+					pos: "短语 放风筝",
+					freq: "🔵高频",
+					usage: "[娱乐活动核心短语]"
+				},
+				quick: {
+					root: "fly（飞） + kite（风筝）",
+					suffix: "",
+					formula: "使风筝飞 → 放风筝"
+				},
+				roots: {
+					root: "fly = 飞 🔵",
+					examples: ["fly a plane", "fly away"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's fly a kite → 我们去放风筝吧",
+					"Fly a kite in spring → 春天放风筝"
+				],
+				tips: {
+					memory: "联想记忆：风筝飞在天上 → fly a kite",
+					caution: "fly a kite ≠ fly a plane（动作差异）"
+				}
+			},
+			// 其他高频词
+			{
+				word: "weather",
+				info: {
+					pronunciation: "/ˈweðər/",
+					pos: "n. 天气",
+					freq: "🔴极高频",
+					usage: "[天气描述核心词汇]"
+				},
+				quick: {
+					root: "古英语 weder",
+					suffix: "",
+					formula: "大气状况 → 天气"
+				},
+				roots: {
+					root: "weather = 天气 🔴",
+					examples: ["weather forecast", "weather report"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Check the weather → 查看天气",
+					"Bad weather → 恶劣天气"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘天气’ → 中文直接对应",
+					caution: "weather ≠ climate（天气 vs 气候）"
+				}
+			},
+			{
+				word: "winter",
+				info: {
+					pronunciation: "/ˈwɪntər/",
+					pos: "n. 冬天",
+					freq: "🔴极高频",
+					usage: "[季节核心词汇]"
+				},
+				quick: {
+					root: "古英语 winter",
+					suffix: "",
+					formula: "寒冷的季节 → 冬天"
+				},
+				roots: {
+					root: "winter = 冬天 🔴",
+					examples: ["winter holiday", "winter sports"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Winter is cold → 冬天寒冷",
+					"Winter vacation → 寒假"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘温特’ → 冬天的名字",
+					caution: "winter ≠ summer（注意季节顺序）"
+				}
+			},
+			{
+				word: "rainy",
+				info: {
+					pronunciation: "/ˈreɪni/",
+					pos: "adj. 下雨的",
+					freq: "🔵高频",
+					usage: "[天气描述核心词汇]"
+				},
+				quick: {
+					root: "rain（雨）",
+					suffix: "-y（形容词后缀）",
+					formula: "下雨的 → rainy"
+				},
+				roots: {
+					root: "rain = 雨 🔵",
+					examples: ["rainy day", "raincoat"]
+				},
+				suffixes: {
+					suffix: "-y = 形容词后缀 🔵",
+					examples: ["rainy", "windy"]
+				},
+				examples: [
+					"A rainy day → 下雨天",
+					"Bring an umbrella on rainy days → 雨天带伞"
+				],
+				tips: {
+					memory: "拆分法：rain + -y → 下雨的",
+					caution: "rainy ≠ sunny（注意天气差异）"
+				}
+			},
+			{
+				word: "eat breakfast",
+				info: {
+					pronunciation: "/iːt ˈbrekfəst/",
+					pos: "短语 吃早餐",
+					freq: "🔴极高频",
+					usage: "[日常活动核心短语]"
+				},
+				quick: {
+					root: "eat（吃） + breakfast（早餐）",
+					suffix: "",
+					formula: "吃早餐 → 吃早餐"
+				},
+				roots: {
+					root: "breakfast = 早餐 🔴",
+					examples: ["breakfast time", "breakfast food"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I eat breakfast at 7 AM → 我早上7点吃早餐",
+					"Don't skip breakfast → 不要不吃早餐"
+				],
+				tips: {
+					memory: "直接翻译：eat（吃） + breakfast（早餐）",
+					caution: "breakfast ≠ lunch（注意餐点区分）"
+				}
+			},
+			{
+				word: "go to school",
+				info: {
+					pronunciation: "/ɡoʊ tu skuːl/",
+					pos: "短语 去上学",
+					freq: "🔴极高频",
+					usage: "[日常活动核心短语]"
+				},
+				quick: {
+					root: "go（去） + school（学校）",
+					suffix: "",
+					formula: "去学校 → 去上学"
+				},
+				roots: {
+					root: "school = 学校 🔴",
+					examples: ["school bag", "school day"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I go to school on Monday → 我周一去上学",
+					"Go to school early → 早点去上学"
+				],
+				tips: {
+					memory: "联想记忆：go（去） + school（学校） = 去上学",
+					caution: "go to school ≠ go to bed（动作差异）"
+				}
+			},
+			{
+				word: "fifteen",
+				info: {
+					pronunciation: "/ˌfɪfˈtiːn/",
+					pos: "num. 十五",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "fif（来自five） + teen（十加）",
+					suffix: "",
+					formula: "五加十 → 十五"
+				},
+				roots: {
+					root: "fif = five 🔴",
+					examples: ["fifteen", "fifteenth"]
+				},
+				suffixes: {
+					suffix: "-teen = 十加 🔴",
+					examples: ["thirteen", "fourteen"]
+				},
+				examples: [
+					"Fifteen students → 十五名学生",
+					"Fifteen minutes → 十五分钟"
+				],
+				tips: {
+					memory: "拆分法：fif（五） + teen（十加） = 十五",
+					caution: "fifteen ≠ fifty（注意发音差异）"
+				}
+			},
+			{
+				word: "twenty",
+				info: {
+					pronunciation: "/ˈtwɛnti/",
+					pos: "num. 二十",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "twen（来自two） + ty（十倍）",
+					suffix: "",
+					formula: "二的十倍 → 二十"
+				},
+				roots: {
+					root: "twen = two 🔴",
+					examples: ["twenty", "twentieth"]
+				},
+				suffixes: {
+					suffix: "-ty = 十倍 🔴",
+					examples: ["thirty", "forty"]
+				},
+				examples: [
+					"Twenty apples → 二十个苹果",
+					"Twenty dollars → 二十美元"
+				],
+				tips: {
+					memory: "拆分法：twen（二） + ty（十倍） = 二十",
+					caution: "twenty ≠ twelve（注意数字顺序）"
+				}
+			},
+			{
+				word: "at",
+				info: {
+					pronunciation: "/æt/",
+					pos: "prep. 在；处于",
+					freq: "🔴极高频",
+					usage: "[介词核心词汇]"
+				},
+				quick: {
+					root: "古英语 æt",
+					suffix: "",
+					formula: "表示位置或时间 → 在"
+				},
+				roots: {
+					root: "at = 在 🔴",
+					examples: ["at school", "at home"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I am at school → 我在学校",
+					"At 7 o'clock → 在7点"
+				],
+				tips: {
+					memory: "联想记忆：发音类似‘艾特’ → 社交媒体中的@符号",
+					caution: "at ≠ in（注意位置范围差异）"
+				}
+			},
+			{
+				word: "can't",
+				info: {
+					pronunciation: "/kænt/",
+					pos: "aux. 不能",
+					freq: "🔴极高频",
+					usage: "[情态动词核心缩写]"
+				},
+				quick: {
+					root: "cannot（不能）的缩写",
+					suffix: "",
+					formula: "can + not → can't"
+				},
+				roots: {
+					root: "can = 能力 🔴",
+					examples: ["can do", "can't help"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I can't swim → 我不会游泳",
+					"Can't you see? → 你难道看不见？"
+				],
+				tips: {
+					memory: "缩写记忆：can + not = can't（省略 o）",
+					caution: "can't ≠ can（否定与肯定的区分）"
+				}
+			},
+			{
+				word: "cold",
+				info: {
+					pronunciation: "/koʊld/",
+					pos: "adj. 寒冷的",
+					freq: "🔴极高频",
+					usage: "[天气/温度核心词汇]"
+				},
+				quick: {
+					root: "古英语 cald",
+					suffix: "",
+					formula: "温度低 → 寒冷的"
+				},
+				roots: {
+					root: "cold = 寒冷 🔴",
+					examples: ["cold weather", "cold hands"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"It's cold outside → 外面很冷",
+					"A cold drink → 冰冷的饮料"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘考德’ → 寒冷的英文",
+					caution: "cold ≠ cool（冷 vs 凉爽的区别）"
+				}
+			},
+			{
+				word: "cool",
+				info: {
+					pronunciation: "/kuːl/",
+					pos: "adj. 凉爽的",
+					freq: "🔴极高频",
+					usage: "[温度/时尚核心词汇]"
+				},
+				quick: {
+					root: "古英语 cōl",
+					suffix: "",
+					formula: "温度适中 → 凉爽的"
+				},
+				roots: {
+					root: "cool = 凉爽 🔴",
+					examples: ["cool breeze", "cool idea"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"A cool day → 凉爽的一天",
+					"That's cool! → 这很酷！"
+				],
+				tips: {
+					memory: "联想记忆：发音类似‘酷’ → 时尚的‘酷’源自此词",
+					caution: "cool ≠ cold（注意温度差异）"
+				}
+			},
+			{
+				word: "eat lunch",
+				info: {
+					pronunciation: "/iːt lʌntʃ/",
+					pos: "短语 吃午餐",
+					freq: "🔴极高频",
+					usage: "[日常活动核心短语]"
+				},
+				quick: {
+					root: "eat（吃） + lunch（午餐）",
+					suffix: "",
+					formula: "吃中午的一餐 → 吃午餐"
+				},
+				roots: {
+					root: "lunch = 午餐 🔴",
+					examples: ["lunch time", "lunch box"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"We eat lunch at 12 noon → 我们中午12点吃午餐",
+					"Don't skip lunch → 不要不吃午餐"
+				],
+				tips: {
+					memory: "直接翻译：eat（吃） + lunch（午餐）",
+					caution: "lunch ≠ breakfast（注意餐点区分）"
+				}
+			},
+			{
+				word: "eleven",
+				info: {
+					pronunciation: "/ɪˈlevn/",
+					pos: "num. 十一",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "古英语 endleofan（意为‘剩下一个’）",
+					suffix: "",
+					formula: "ten + one → eleven"
+				},
+				roots: {
+					root: "eleven = 十一 🔴",
+					examples: ["eleven students", "eleventh month"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Eleven apples → 十一个苹果",
+					"Eleven o'clock → 十一点钟"
+				],
+				tips: {
+					memory: "联想记忆：发音类似‘十一’ → 中文直接对应",
+					caution: "eleven ≠ twelve（注意数字顺序）"
+				}
+			},
+			{
+				word: "favourite",
+				info: {
+					pronunciation: "/ˈfeɪvərɪt/",
+					pos: "adj. 最喜欢的",
+					freq: "🔴极高频",
+					usage: "[情感表达核心词汇]"
+				},
+				quick: {
+					root: "来自法语 favori（喜爱的）",
+					suffix: "",
+					formula: "特别喜欢 → 最喜欢的"
+				},
+				roots: {
+					root: "favourite = 最喜欢 🔴",
+					examples: ["favourite food", "favourite colour"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"My favourite colour is blue → 我最喜欢的颜色是蓝色",
+					"Favourite song → 最爱的歌曲"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘费维瑞特’ → 想象最喜欢的物品",
+					caution: "favourite ≠ favorite（美式拼写无‘u’）"
+				}
+			},
+			{
+				word: "fifty",
+				info: {
+					pronunciation: "/ˈfɪfti/",
+					pos: "num. 五十",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "fif（来自five） + ty（十倍）",
+					suffix: "",
+					formula: "五的十倍 → 五十"
+				},
+				roots: {
+					root: "fif = five 🔴",
+					examples: ["fifty", "fiftieth"]
+				},
+				suffixes: {
+					suffix: "-ty = 十倍 🔴",
+					examples: ["fifty", "sixty"]
+				},
+				examples: [
+					"Fifty years → 五十年",
+					"Fifty dollars → 五十美元"
+				],
+				tips: {
+					memory: "拆分法：fif（五） + ty（十倍） = 五十",
+					caution: "fifty ≠ fifteen（注意发音差异）"
+				}
+			},
+			{
+				word: "fourteen",
+				info: {
+					pronunciation: "/ˌfɔːrˈtiːn/",
+					pos: "num. 十四",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "four（四） + teen（十加）",
+					suffix: "",
+					formula: "十加四 → 十四"
+				},
+				roots: {
+					root: "four = 四 🔴",
+					examples: ["fourteen", "fourteen-year-old"]
+				},
+				suffixes: {
+					suffix: "-teen = 十加 🔴",
+					examples: ["thirteen", "fourteen"]
+				},
+				examples: [
+					"Fourteen students → 十四名学生",
+					"Fourteen days → 十四天"
+				],
+				tips: {
+					memory: "拆分法：four（四） + teen（十加） = 十四",
+					caution: "fourteen ≠ forty（注意发音和拼写）"
+				}
+			},
+			{
+				word: "Friday",
+				info: {
+					pronunciation: "/ˈfraɪdeɪ/",
+					pos: "n. 星期五",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Frīgedæg（意为‘弗雷女神之日’）",
+					suffix: "",
+					formula: "维京神话中的女神 → 星期五"
+				},
+				roots: {
+					root: "Friday = 星期五 🔴",
+					examples: ["Friday class", "Friday night"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Friday is the fifth day → 星期五是第五天",
+					"See you on Friday → 星期五见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘弗莱德’ → 想象星期五的名字",
+					caution: "Friday ≠ Friday（注意拼写与发音对应）"
+				}
+			},
+			{
+				word: "go home",
+				info: {
+					pronunciation: "/ɡoʊ hoʊm/",
+					pos: "短语 回家",
+					freq: "🔴极高频",
+					usage: "[日常活动核心短语]"
+				},
+				quick: {
+					root: "go（去） + home（家）",
+					suffix: "",
+					formula: "去家 → 回家"
+				},
+				roots: {
+					root: "go = 去 🔴",
+					examples: ["go school", "go shopping"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"I go home at 5 PM → 我下午5点回家",
+					"Don't go home yet → 先别回家"
+				],
+				tips: {
+					memory: "联想记忆：go（去） + home（家） = 回家",
+					caution: "go home ≠ go to home（习惯用法省略 to）"
+				}
+			},
+			{
+				word: "go to bed",
+				info: {
+					pronunciation: "/ɡoʊ tu bɛd/",
+					pos: "短语 上床睡觉",
+					freq: "🔴极高频",
+					usage: "[日常活动核心短语]"
+				},
+				quick: {
+					root: "go（去） + to bed（到床上）",
+					suffix: "",
+					formula: "去床上 → 上床睡觉"
+				},
+				roots: {
+					root: "bed = 床 🔴",
+					examples: ["bed room", "bed time"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Go to bed before 10 PM → 晚上10点前上床",
+					"Don't go to bed late → 不要熬夜"
+				],
+				tips: {
+					memory: "联想记忆：go（去） + to bed（到床上） = 上床睡觉",
+					caution: "go to bed ≠ get up（睡觉 vs 起床）"
+				}
+			},
+			{
+				word: "hot",
+				info: {
+					pronunciation: "/hɑːt/",
+					pos: "adj. 热的",
+					freq: "🔴极高频",
+					usage: "[温度/天气核心词汇]"
+				},
+				quick: {
+					root: "古英语 hāt",
+					suffix: "",
+					formula: "温度高 → 热的"
+				},
+				roots: {
+					root: "hot = 热 🔴",
+					examples: ["hot tea", "hot day"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"The tea is too hot → 茶太烫了",
+					"A hot summer day → 炎热的夏日"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘火’ → 热的英文",
+					caution: "hot ≠ warm（注意温度差异）"
+				}
+			},
+			{
+				word: "let's",
+				info: {
+					pronunciation: "/lets/",
+					pos: "aux. 让我们",
+					freq: "🔴极高频",
+					usage: "[情态动词核心缩写]"
+				},
+				quick: {
+					root: "let us（让我们）的缩写",
+					suffix: "",
+					formula: "let + us → let's"
+				},
+				roots: {
+					root: "let = 允许 🔴",
+					examples: ["let me", "let's go"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's play → 我们一起玩吧",
+					"Let's go home → 我们回家吧"
+				],
+				tips: {
+					memory: "缩写记忆：let us = let's（省略 u）",
+					caution: "let's ≠ lets（注意单复数和缩写区别）"
+				}
+			},
+			{
+				word: "make a model plane",
+				info: {
+					pronunciation: "/meɪk ə ˈmɑːdəl peɪn/",
+					pos: "短语 制作飞机模型",
+					freq: "🔵高频",
+					usage: "[手工活动核心短语]"
+				},
+				quick: {
+					root: "make（制作） + model plane（飞机模型）",
+					suffix: "",
+					formula: "制作模型 → 制作飞机模型"
+				},
+				roots: {
+					root: "make = 制作 🔵",
+					examples: ["make a cake", "make a paper airplane"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's make a model plane → 我们制作一个飞机模型吧",
+					"Make a model plane for the project → 为项目制作飞机模型"
+				],
+				tips: {
+					memory: "联想记忆：model plane = 飞机模型 → 制作模型",
+					caution: "model plane ≠ model car（注意物品差异）"
+				}
+			},
+			{
+				word: "make a snowman",
+				info: {
+					pronunciation: "/meɪk ə ˈsnoʊmən/",
+					pos: "短语 堆雪人",
+					freq: "🔵高频",
+					usage: "[冬季活动核心短语]"
+				},
+				quick: {
+					root: "make（制作） + snowman（雪人）",
+					suffix: "",
+					formula: "用雪制作人 → 堆雪人"
+				},
+				roots: {
+					root: "snowman = 雪人 🔵",
+					examples: ["snowman in winter", "make a snowman"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's make a snowman → 我们去堆雪人吧",
+					"Make a snowman with friends → 和朋友一起堆雪人"
+				],
+				tips: {
+					memory: "联想记忆：snow（雪） + man（人） → 雪人",
+					caution: "make a snowman ≠ make a cake（动作场景不同）"
+				}
+			},
+			{
+				word: "Monday",
+				info: {
+					pronunciation: "/ˈmʌndeɪ/",
+					pos: "n. 星期一",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Monandæg（意为‘月亮之日’）",
+					suffix: "",
+					formula: "月亮的星期 → 星期一"
+				},
+				roots: {
+					root: "Monday = 星期一 🔴",
+					examples: ["Monday morning", "Monday class"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Monday is the first school day → 星期一是上学第一天",
+					"See you on Monday → 下周一见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘蒙代’ → 想象星期一的名字",
+					caution: "Monday ≠ Tuesday（注意拼写与顺序）"
+				}
+			},
+			{
+				word: "play football",
+				info: {
+					pronunciation: "/pleɪ ˈfʊtˌbɔːl/",
+					pos: "短语 踢足球",
+					freq: "🔴极高频",
+					usage: "[运动活动核心短语]"
+				},
+				quick: {
+					root: "play（玩） + football（足球）",
+					suffix: "",
+					formula: "用脚踢的球 → 足球"
+				},
+				roots: {
+					root: "football = 足球 🔴",
+					examples: ["play soccer", "football match"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's play football → 我们去踢足球吧",
+					"Play football with friends → 和朋友踢足球"
+				],
+				tips: {
+					memory: "联想记忆：foot（脚） + ball（球） → 足球",
+					caution: "play football ≠ play basketball（注意运动类型）"
+				}
+			},
+			{
+				word: "eat dinner",
+				info: {
+					pronunciation: "/iːt ˈdɪnər/",
+					pos: "短语 吃晚餐",
+					freq: "🔴极高频",
+					usage: "[日常活动核心短语]"
+				},
+				quick: {
+					root: "eat（吃） + dinner（晚餐）",
+					suffix: "",
+					formula: "吃晚的一餐 → 吃晚餐"
+				},
+				roots: {
+					root: "dinner = 晚餐 🔴",
+					examples: ["dinner time", "family dinner"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"We eat dinner at 6 PM → 我们晚上6点吃晚餐",
+					"Don't skip dinner → 不要不吃晚餐"
+				],
+				tips: {
+					memory: "联想记忆：dinner = 晚餐（联想晚餐的‘D’像叉子）",
+					caution: "dinner ≠ lunch（注意餐点区分）"
+				}
+			},
+			{
+				word: "forty",
+				info: {
+					pronunciation: "/ˈfɔːrti/",
+					pos: "num. 四十",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "four（四） + ty（十倍）",
+					suffix: "",
+					formula: "四的十倍 → 四十"
+				},
+				roots: {
+					root: "four = 四 🔴",
+					examples: ["four apples", "forty years"]
+				},
+				suffixes: {
+					suffix: "-ty = 十倍 🔴",
+					examples: ["forty", "sixty"]
+				},
+				examples: [
+					"Forty years old → 四十岁",
+					"Forty pages → 四十页"
+				],
+				tips: {
+					memory: "拆分法：four（四） + ty（十倍） = 四十",
+					caution: "forty ≠ fourteen（注意发音和拼写）"
+				}
+			},
+			{
+				word: "playtime",
+				info: {
+					pronunciation: "/ˈpleɪtaɪm/",
+					pos: "n. 玩耍时间",
+					freq: "🔵高频",
+					usage: "[日常活动核心词汇]"
+				},
+				quick: {
+					root: "play（玩） + time（时间）",
+					suffix: "",
+					formula: "玩耍的时间 → playtime"
+				},
+				roots: {
+					root: "play = 玩 🔵",
+					examples: ["play with toys", "playtime rules"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Recess is our playtime → 课间是我们玩耍的时间",
+					"No playtime today → 今天没有玩耍时间"
+				],
+				tips: {
+					memory: "联想记忆：play（玩） + time（时间） = 玩耍时间",
+					caution: "playtime ≠ play → 名词 vs 动词"
+				}
+			},
+			{
+				word: "ride a bike",
+				info: {
+					pronunciation: "/raɪd ə baɪk/",
+					pos: "短语 骑自行车",
+					freq: "🔴极高频",
+					usage: "[运动活动核心短语]"
+				},
+				quick: {
+					root: "ride（骑） + bike（自行车）",
+					suffix: "",
+					formula: "骑自行车 → 骑行"
+				},
+				roots: {
+					root: "bike = 自行车 🔴",
+					examples: ["bike helmet", "ride a bike"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's ride a bike → 我们去骑自行车吧",
+					"Ride a bike to school → 骑自行车上学"
+				],
+				tips: {
+					memory: "联想记忆：bike = bicycle（自行车的缩写）",
+					caution: "ride a bike ≠ drive a car（注意交通工具差异）"
+				}
+			},
+			{
+				word: "Saturday",
+				info: {
+					pronunciation: "/ˈsætədeɪ/",
+					pos: "n. 星期六",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Sæternesdæg（意为‘土星之日’）",
+					suffix: "",
+					formula: "罗马神话中的土星 → 星期六"
+				},
+				roots: {
+					root: "Saturday = 星期六 🔴",
+					examples: ["Saturday morning", "Saturday night"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Saturday is the weekend → 星期六是周末",
+					"See you on Saturday → 星期六见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘萨特’ → 想象星期六的名字",
+					caution: "Saturday ≠ Sunday（注意顺序和拼写）"
+				}
+			},
+			{
+				word: "season",
+				info: {
+					pronunciation: "/ˈsiːzən/",
+					pos: "n. 季节",
+					freq: "🔴极高频",
+					usage: "[自然现象核心词汇]"
+				},
+				quick: {
+					root: "来自拉丁语 tempus（时间）",
+					suffix: "",
+					formula: "一年的时间段 → 季节"
+				},
+				roots: {
+					root: "season = 季节 🔴",
+					examples: ["four seasons", "spring season"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"There are four seasons → 一年有四季",
+					"My favorite season is summer → 我最喜欢的季节是夏天"
+				],
+				tips: {
+					memory: "联想记忆：season = seasonal（季节的） → 季节相关",
+					caution: "season ≠ sea（注意拼写和发音差异）"
+				}
+			},
+			{
+				word: "snowy",
+				info: {
+					pronunciation: "/ˈsnəʊi/",
+					pos: "adj. 下雪的；有雪的",
+					freq: "🔵高频",
+					usage: "[天气/季节核心词汇]"
+				},
+				quick: {
+					root: "snow（雪） + -y（形容词后缀）",
+					suffix: "",
+					formula: "有雪的 → snowy"
+				},
+				roots: {
+					root: "snow = 雪 🔵",
+					examples: ["snowy day", "snowy mountain"]
+				},
+				suffixes: {
+					suffix: "-y = 充满 🔵",
+					examples: ["snowy", "sunny"]
+				},
+				examples: [
+					"A snowy day → 下雪的一天",
+					"Snowy winter → 雪冬"
+				],
+				tips: {
+					memory: "后缀记忆：-y = 充满 → snowy = 充满雪的",
+					caution: "snowy ≠ snow（形容词 vs 名词）"
+				}
+			},
+			{
+				word: "summer",
+				info: {
+					pronunciation: "/ˈsʌmər/",
+					pos: "n. 夏天",
+					freq: "🔴极高频",
+					usage: "[季节名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 sumor",
+					suffix: "",
+					formula: "一年中最热的季节 → 夏天"
+				},
+				roots: {
+					root: "summer = 夏天 🔴",
+					examples: ["summer vacation", "summer fruits"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Summer is hot → 夏天很热",
+					"Summer vacation starts in July → 暑假七月份开始"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘萨姆’ → 想象夏天的名字",
+					caution: "summer ≠ season（注意季节与具体季节的区分）"
+				}
+			},
+			{
+				word: "Sunday",
+				info: {
+					pronunciation: "/ˈsʌndeɪ/",
+					pos: "n. 星期日",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Sundæg（意为‘太阳之日’）",
+					suffix: "",
+					formula: "太阳的星期 → 星期日"
+				},
+				roots: {
+					root: "Sunday = 星期日 🔴",
+					examples: ["Sunday church", "Sunday morning"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Sunday is the first day of the week → 星期日是一周的第一天",
+					"See you on Sunday → 星期日见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘桑迪’ → 想象星期日的名字",
+					caution: "Sunday ≠ Saturday（注意顺序和拼写）"
+				}
+			},
+			{
+				word: "swim",
+				info: {
+					pronunciation: "/swɪm/",
+					pos: "v. 游泳",
+					freq: "🔴极高频",
+					usage: "[运动活动核心词汇]"
+				},
+				quick: {
+					root: "古英语 swimman",
+					suffix: "",
+					formula: "用四肢划水 → 游泳"
+				},
+				roots: {
+					root: "swim = 游泳 🔴",
+					examples: ["swim in the pool", "swim lessons"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Let's swim in the pool → 我们去游泳池游泳吧",
+					"She can swim very well → 她游泳游得很好"
+				],
+				tips: {
+					memory: "联想记忆：发音类似‘游泳’ → 中文直译",
+					caution: "swim ≠ swimmer（动词 vs 名词）"
+				}
+			},
+			{
+				word: "thirteen",
+				info: {
+					pronunciation: "/θəˈrɪtn/",
+					pos: "num. 十三",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "three（三） + teen（十加）",
+					suffix: "",
+					formula: "十加三 → 十三"
+				},
+				roots: {
+					root: "three = 三 🔴",
+					examples: ["thirteen cookies", "thirteenth birthday"]
+				},
+				suffixes: {
+					suffix: "-teen = 十加 🔴",
+					examples: ["thirteen", "fourteen"]
+				},
+				examples: [
+					"Thirteen students are here → 这里有十三名学生",
+					"Thirteen plus two is fifteen → 十三加二等于十五"
+				],
+				tips: {
+					memory: "拆分法：three（三） + teen（十加） = 十三",
+					caution: "thirteen ≠ thirteen（注意拼写与发音对应）"
+				}
+			},
+			{
+				word: "Thursday",
+				info: {
+					pronunciation: "/ˈθɜːrzdɪ/",
+					pos: "n. 星期四",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Þūnresdæg（意为‘雷神之日’）",
+					suffix: "",
+					formula: "北欧神话中的雷神 → 星期四"
+				},
+				roots: {
+					root: "Thursday = 星期四 🔴",
+					examples: ["Thursday class", "Thursday night"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Thursday is the fourth day → 星期四是第四天",
+					"See you on Thursday → 星期四见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘撒撒’ → 想象星期四的名字",
+					caution: "Thursday ≠ Thursday（注意拼写与发音对应）"
+				}
+			},
+			{
+				word: "time",
+				info: {
+					pronunciation: "/taɪm/",
+					pos: "n. 时间",
+					freq: "🔴极高频",
+					usage: "[日常活动核心词汇]"
+				},
+				quick: {
+					root: "古英语 tīma",
+					suffix: "",
+					formula: "计量单位 → 时间"
+				},
+				roots: {
+					root: "time = 时间 🔴",
+					examples: ["good time", "time to go"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"What time is it? → 现在几点？",
+					"Have a good time → 玩得开心"
+				],
+				tips: {
+					memory: "联想记忆：time = 时刻（联想到时钟）",
+					caution: "time ≠ times（单复数区别）"
+				}
+			},
+			{
+				word: "today",
+				info: {
+					pronunciation: "/təˈdeɪ/",
+					pos: "n./adj. 今天",
+					freq: "🔴极高频",
+					usage: "[时间表达核心词汇]"
+				},
+				quick: {
+					root: "to（到） + day（天）",
+					suffix: "",
+					formula: "当前的天 → 今天"
+				},
+				roots: {
+					root: "day = 天 🔴",
+					examples: ["today's weather", "today is Monday"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"What will we do today? → 今天我们要做什么？",
+					"Today is sunny → 今天天气晴朗"
+				],
+				tips: {
+					memory: "联想记忆：to（到） + day（天） = 当天",
+					caution: "today ≠ tomorrow（今天 vs 明天）"
+				}
+			},
+			{
+				word: "Tuesday",
+				info: {
+					pronunciation: "/ˈtuzdeɪ/",
+					pos: "n. 星期二",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Tīwesdæg（意为‘战神之日’）",
+					suffix: "",
+					formula: "北欧神话中的战神 → 星期二"
+				},
+				roots: {
+					root: "Tuesday = 星期二 🔴",
+					examples: ["Tuesday morning", "Tuesday class"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Tuesday is the second school day → 星期二是第二天上学",
+					"See you on Tuesday → 星期二见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘吐斯’ → 想象星期二的名字",
+					caution: "Tuesday ≠ Thursday（注意顺序和拼写）"
+				}
+			},
+			{
+				word: "twelve",
+				info: {
+					pronunciation: "/twelv/",
+					pos: "num. 十二",
+					freq: "🔴极高频",
+					usage: "[数字核心词汇]"
+				},
+				quick: {
+					root: "two（二） + -elve（十二后缀）",
+					suffix: "",
+					formula: "二的六倍 → 十二"
+				},
+				roots: {
+					root: "two = 二 🔴",
+					examples: ["twelve eggs", "twelfth month"]
+				},
+				suffixes: {
+					suffix: "-elve = 十二 🔴",
+					examples: ["twelve", "eleven"]
+				},
+				examples: [
+					"Twelve months in a year → 一年有十二个月",
+					"Twelve plus three is fifteen → 十二加三等于十五"
+				],
+				tips: {
+					memory: "联想记忆：two（二） + -elve（十二后缀）",
+					caution: "twelve ≠ twenty（注意拼写与发音）"
+				}
+			},
+			{
+				word: "umbrella",
+				info: {
+					pronunciation: "/əmˈbrelə/",
+					pos: "n. 雨伞",
+					freq: "🔵高频",
+					usage: "[日常物品核心词汇]"
+				},
+				quick: {
+					root: "意大利语 ombrello（遮荫物）",
+					suffix: "",
+					formula: "遮挡雨的工具 → 雨伞"
+				},
+				roots: {
+					root: "umbrella = 雨伞 🔵",
+					examples: ["take an umbrella", "umbrella stand"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Bring an umbrella if it rains → 如果下雨带上雨伞",
+					"A broken umbrella → 坏掉的雨伞"
+				],
+				tips: {
+					memory: "联想记忆：umbrella中的‘umb’像雨伞的伞骨",
+					caution: "umbrella ≠ umbrella（注意拼写中的‘b’和‘r’顺序）"
+				}
+			},
+			{
+				word: "warm",
+				info: {
+					pronunciation: "/wɔːrm/",
+					pos: "adj. 温暖的",
+					freq: "🔴极高频",
+					usage: "[温度/天气核心词汇]"
+				},
+				quick: {
+					root: "古英语 wearm",
+					suffix: "",
+					formula: "舒适的温度 → 温暖的"
+				},
+				roots: {
+					root: "warm = 温暖 🔴",
+					examples: ["warm coat", "warm welcome"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"A warm day → 温暖的一天",
+					"Keep warm → 保持温暖"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘沃姆’ → 温暖的感觉",
+					caution: "warm ≠ hot（注意温度差异）"
+				}
+			},
+			{
+				word: "Wednesday",
+				info: {
+					pronunciation: "/ˈwenzdeɪ/",
+					pos: "n. 星期三",
+					freq: "🔴极高频",
+					usage: "[星期名称核心词汇]"
+				},
+				quick: {
+					root: "古英语 Wōdnesdæg（意为‘战神之日’）",
+					suffix: "",
+					formula: "维京神话中的战神 → 星期三"
+				},
+				roots: {
+					root: "Wednesday = 星期三 🔴",
+					examples: ["Wednesday afternoon", "Wednesday meeting"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"Wednesday is the middle of the week → 星期三是周中",
+					"See you on Wednesday → 星期三见"
+				],
+				tips: {
+					memory: "谐音记忆：发音类似‘温斯’ → 想象星期三的名字",
+					caution: "Wednesday ≠ Wednesday（注意拼写与发音对应）"
+				}
+			},
+			{
+				word: "when",
+				info: {
+					pronunciation: "/wen/",
+					pos: "adv./conj. 何时",
+					freq: "🔴极高频",
+					usage: "[时间疑问词核心词汇]"
+				},
+				quick: {
+					root: "古英语 hwænne",
+					suffix: "",
+					formula: "询问时间 → when"
+				},
+				roots: {
+					root: "when = 何时 🔴",
+					examples: ["when is your birthday?", "when to go"]
+				},
+				suffixes: {
+					suffix: "无",
+					examples: []
+				},
+				examples: [
+					"When is your birthday? → 你的生日是什么时候？",
+					"I don't know when to go → 我不知道什么时候去"
+				],
+				tips: {
+					memory: "联想记忆：when = 时间（W开头，联想星期）",
+					caution: "when ≠ where（时间 vs 地点疑问词）"
+				}
+			},
+			{
+				word: "windy",
+				info: {
+					pronunciation: "/ˈwɪndi/",
+					pos: "adj. 多风的",
+					freq: "🔵高频",
+					usage: "[天气/季节核心词汇]"
+				},
+				quick: {
+					root: "wind（风） + -y（形容词后缀）",
+					suffix: "",
+					formula: "充满风的 → 多风的"
+				},
+				roots: {
+					root: "wind = 风 🔵",
+					examples: ["windy day", "windy season"]
+				},
+				suffixes: {
+					suffix: "-y = 充满 🔵",
+					examples: ["windy", "sunny"]
+				},
+				examples: [
+					"A windy day → 多风的一天",
+					"Wind turbines work best on windy days → 风力涡轮机在多风的日子工作最好"
+				],
+				tips: {
+					memory: "后缀记忆：-y = 充满 → windy = 充满风的",
+					caution: "windy ≠ window（注意拼写和含义差异）"
+				}
+			},
+            {
+                word: "friend",
+                info: {
+                    pronunciation: "/frend/",
+                    pos: "n. 朋友",
+                    freq: "🔴极高频",
+                    usage: "[日常常用，社交场景核心词汇]"
+                },
+                quick: {
+                    root: "古英语 frīend（亲密的人）",
+                    suffix: "",
+                    formula: "友谊关系中的伙伴"
+                },
+                roots: {
+                    root: "friend = 朋友 🔴",
+                    examples: [
+                        "friendship（友谊）",
+                        "friendly（友好的）"
+                    ]
+                },
+                suffixes: {
+                    suffix: "-ly = 形容词后缀 🔴",
+                    examples: [
+                        "friendly（友好的）",
+                        "happily（快乐地）"
+                    ]
+                },
+                examples: [
+                    "make friends → 交朋友",
+                    "best friend → 最好的朋友",
+                    "help a friend → 帮助朋友"
+                ],
+                tips: {
+                    memory: "谐音记忆：发音类似‘弗兰德’ → 想象朋友名字",
+                    caution: "friend ≠ classmate（朋友可以是同学，也可以是其他人）"
+                }
+            }
+        ];
+
+        let currentIdx = 0;
+
+        function loadCard() {
+            const card = words[currentIdx];
+            const content = `
+                <div class="section">
+                    <div class="section-title">📖 基本信息</div>
+                    <ul class="example">
+                        <li>发音：${card.info.pronunciation}</li>
+                        <li>词性：${card.info.pos}</li>
+                        <li>频率：${card.info.freq} ${card.info.usage}</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">⚡️ 快速理解</div>
+                    <ul class="example">
+                        <li>词根：${card.quick.root}</li>
+                        <li>词缀：${card.quick.suffix || "无"}</li>
+                        <li>公式：${card.quick.formula}</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🔍 词根词缀价值</div>
+                    <ul class="example">
+                        <li>高频词根：${card.roots.root}</li>
+                        <li>常用家族：${card.roots.examples.join(", ")}</li>
+                        <li>高频词缀：${card.suffixes.suffix}</li>
+                        <li>常见搭配：${card.suffixes.examples.join(", ")}</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📌 实用搭配</div>
+                    <ul class="example">
+                        ${card.examples.map(ex => `<li>${ex}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">💡 记忆技巧</div>
+                    <p>${card.tips.memory}</p>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">❗ 易混点提示</div>
+                    <p>${card.tips.caution}</p>
+                </div>
+            `;
+            document.getElementById("cardContent").innerHTML = content;
+            document.getElementById("currentWord").textContent = card.word;
+        }
+
+        function prevCard() {
+            if (currentIdx > 0) currentIdx--;
+            loadCard();
+        }
+
+        function nextCard() {
+            if (currentIdx < words.length - 1) currentIdx++;
+            loadCard();
+        }
+
+        // 初始加载第一个单词
+        loadCard();
+    </script>
+</body>
+</html>
