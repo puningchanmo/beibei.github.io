@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>小学英语口语练习</title>
+  <style>
+    /* 全局样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 100%;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* 顶部导航栏 */
+    .header {
+      background-color: #4a90e2;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .header h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    .back-button {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      display: none;
+      cursor: pointer;
+    }
+
+    /* 主内容区域 */
+    .main-content {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    /* 单元列表样式 */
+    .unit-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      padding: 10px;
+    }
+    .unit-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .unit-card:hover {
+      transform: scale(1.02);
+    }
+    .unit-card h2 {
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .unit-card p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .unit-1 { background-color: #FFECB3; }
+    .unit-2 { background-color: #C8E6C9; }
+    .unit-3 { background-color: #B3E5FC; }
+    .unit-4 { background-color: #E1BEE7; }
+    .unit-5 { background-color: #FFCCBC; }
+    .unit-6 { background-color: #D7CCC8; }
+
+    /* 底部导航栏 */
+    .tab-nav {
+      display: flex;
+      border-top: 1px solid #eaeaea;
+      background-color: white;
+    }
+    .tab-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      background-color: white;
+      cursor: pointer;
+    }
+    .tab-item.active {
+      color: #4a90e2;
+      border-bottom: 2px solid #4a90e2;
+    }
+
+    /* 内容展示区 */
+    .content-area {
+      display: none;
+    }
+    
+    /* 单词列表样式 */
+    .word-list {
+      list-style-type: none;
+    }
+    .word-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+    }
+    .word-item .word {
+      font-weight: bold;
+      color: #333;
+    }
+    .word-item .meaning {
+      color: #666;
+    }
+
+    /* 对话练习样式 */
+    .dialogue-list {
+      list-style-type: none;
+    }
+    .dialogue-item {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+      font-weight: bold;
+      color: #4a90e2;
+      margin-bottom: 10px;
+    }
+    .answer-container {
+      margin-top: 10px;
+      border-top: 1px dashed #eaeaea;
+      padding-top: 10px;
+    }
+    .answer {
+      color: #333;
+      display: none;
+    }
+    .show-answer-btn {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 15px;
+      padding: 5px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    .show-answer-btn:hover {
+      background-color: #eaeaea;
+    }
+
+    /* 单元内容标题 */
+    .unit-title {
+      margin: 10px 0 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    /* 加载动画 */
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <button id="backButton" class="back-button">←</button>
+      <h1>小学英语口语练习</h1>
+    </header>
+
+    <main class="main-content" id="mainContent">
+      <!-- 单元列表，初始显示 -->
+      <div id="unitListView">
+        <div class="unit-list">
+          <div class="unit-card unit-1" data-unit-id="1">
+            <h2>Unit 1</h2>
+            <p>Playtime</p>
+            <p>游戏时间</p>
+          </div>
+          <div class="unit-card unit-2" data-unit-id="2">
+            <h2>Unit 2</h2>
+            <p>Weather</p>
+            <p>天气</p>
+          </div>
+          <div class="unit-card unit-3" data-unit-id="3">
+            <h2>Unit 3</h2>
+            <p>Seasons</p>
+            <p>季节</p>
+          </div>
+          <div class="unit-card unit-4" data-unit-id="4">
+            <h2>Unit 4</h2>
+            <p>Time</p>
+            <p>时间</p>
+          </div>
+          <div class="unit-card unit-5" data-unit-id="5">
+            <h2>Unit 5</h2>
+            <p>My Day</p>
+            <p>我的一天</p>
+          </div>
+          <div class="unit-card unit-6" data-unit-id="6">
+            <h2>Unit 6</h2>
+            <p>My Week</p>
+            <p>我的一周</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 单元内容，初始隐藏 -->
+      <div id="unitContentView" class="content-area">
+        <h2 id="unitTitle" class="unit-title"></h2>
+        
+        <div id="wordListContent">
+          <ul id="wordList" class="word-list"></ul>
+        </div>
+        
+        <div id="dialogueContent" class="content-area">
+          <ul id="dialogueList" class="dialogue-list"></ul>
+        </div>
+      </div>
+    </main>
+
+    <nav id="tabNav" class="tab-nav" style="display: none;">
+      <div id="wordListTab" class="tab-item active">单词列表</div>
+      <div id="dialogueTab" class="tab-item">对话练习</div>
+    </nav>
+  </div>
+
+  <script>
+    // 数据存储模块
+    const DataStore = (function() {
+      // 所有单元的数据
+      const units = [
+        {
+          id: 1,
+          name: "Playtime",
+          chineseName: "游戏时间",
+          theme: "playtime",
+          words: [
+            { word: "play football", meaning: "踢足球" },
+            { word: "fly a kite", meaning: "放风筝" },
+            { word: "ride a bike", meaning: "骑自行车" },
+            { word: "make a model plane", meaning: "做飞机模型" },
+            { word: "swim", meaning: "游泳" },
+            { word: "make a snowman", meaning: "堆雪人" },
+            { word: "can't", meaning: "不能，不会" }
+          ],
+          dialogues: [
+            { question: "Can you play football?", answer: "Yes, I can." },
+            { question: "Can you fly a kite?", answer: "Yes, I can." },
+            { question: "Can you ride a bike?", answer: "Yes, I can." },
+            { question: "Can you make a model plane?", answer: "No, I can't." },
+            { question: "What are they doing?", answer: "They are playing football." },
+            { question: "What are you doing?", answer: "I am flying a kite." },
+            { question: "Do you like to swim?", answer: "Yes, I do." },
+            { question: "What do you like to do?", answer: "I like to ride a bike." }
+          ]
+        },
+        {
+          id: 2,
+          name: "Weather",
+          chineseName: "天气",
+          theme: "weather",
+          words: [
+            { word: "rainy", meaning: "下雨的" },
+            { word: "cloudy", meaning: "多云的" },
+            { word: "snowy", meaning: "下雪的" },
+            { word: "windy", meaning: "刮风的" },
+            { word: "sunny", meaning: "晴朗的" },
+            { word: "umbrella", meaning: "雨伞" },
+            { word: "weather", meaning: "天气" },
+            { word: "wow", meaning: "哇" },
+            { word: "let's", meaning: "让我们……" }
+          ],
+          dialogues: [
+            { question: "What's the weather like today?", answer: "It's sunny." },
+            { question: "What's the weather like today?", answer: "It's rainy." },
+            { question: "What's the weather like today?", answer: "It's cloudy." },
+            { question: "What's the weather like today?", answer: "It's snowy." },
+            { question: "What's the weather like today?", answer: "It's windy." },
+            { question: "It's sunny today. What shall we do?", answer: "Let's play football." },
+            { question: "It's rainy today. What shall we do?", answer: "Let's take an umbrella." },
+            { question: "It's snowy today. What shall we do?", answer: "Let's make a snowman." },
+            { question: "I like sunny days. How about you?", answer: "I like snowy days." }
+          ]
+        },
+        {
+          id: 3,
+          name: "Seasons",
+          chineseName: "季节",
+          theme: "seasons",
+          words: [
+            { word: "spring", meaning: "春天" },
+            { word: "summer", meaning: "夏天" },
+            { word: "autumn", meaning: "秋天" },
+            { word: "winter", meaning: "冬天" },
+            { word: "hot", meaning: "炎热的" },
+            { word: "warm", meaning: "温暖的" },
+            { word: "cool", meaning: "凉爽的" },
+            { word: "cold", meaning: "寒冷的" },
+            { word: "favourite", meaning: "最喜欢的" },
+            { word: "season", meaning: "季节" }
+          ],
+          dialogues: [
+            { question: "What's your favourite season?", answer: "My favourite season is spring." },
+            { question: "What's your favourite season?", answer: "My favourite season is summer." },
+            { question: "What's your favourite season?", answer: "My favourite season is autumn." },
+            { question: "What's your favourite season?", answer: "My favourite season is winter." },
+            { question: "What's spring like?", answer: "Spring is warm." },
+            { question: "What's summer like?", answer: "Summer is hot." },
+            { question: "What's autumn like?", answer: "Autumn is cool." },
+            { question: "What's winter like?", answer: "Winter is cold." },
+            { question: "What do you like to do in spring?", answer: "I like spring. I can fly a kite." },
+            { question: "What do you like to do in summer?", answer: "I like summer. I can swim." }
+          ]
+        },
+        {
+          id: 4,
+          name: "Time",
+          chineseName: "时间",
+          theme: "time",
+          words: [
+            { word: "eleven", meaning: "十一" },
+            { word: "twelve", meaning: "十二" },
+            { word: "twenty", meaning: "二十" },
+            { word: "thirty", meaning: "三十" },
+            { word: "forty", meaning: "四十" },
+            { word: "fifty", meaning: "五十" },
+            { word: "thirteen", meaning: "十三" },
+            { word: "fourteen", meaning: "十四" },
+            { word: "fifteen", meaning: "十五" },
+            { word: "time", meaning: "时间" },
+            { word: "playtime", meaning: "游戏时间，课间休息时间" }
+          ],
+          dialogues: [
+            { question: "What time is it?", answer: "It's eleven o'clock." },
+            { question: "What time is it?", answer: "It's twelve o'clock." },
+            { question: "What time is it?", answer: "It's three o'clock." },
+            { question: "What time is it now?", answer: "It's half past seven." },
+            { question: "It's playtime. What shall we do?", answer: "Let's play football." },
+            { question: "It's twelve o'clock. What time is it?", answer: "It's time for lunch." },
+            { question: "It's three o'clock. What shall we do?", answer: "Let's go home." },
+            { question: "Can you tell me the time?", answer: "It's twenty past four." },
+            { question: "When is your English class?", answer: "It's at ten o'clock." }
+          ]
+        },
+        {
+          id: 5,
+          name: "My Day",
+          chineseName: "我的一天",
+          theme: "myday",
+          words: [
+            { word: "get up", meaning: "起床" },
+            { word: "eat breakfast", meaning: "吃早饭" },
+            { word: "go to school", meaning: "上学" },
+            { word: "eat lunch", meaning: "吃午饭" },
+            { word: "go home", meaning: "回家" },
+            { word: "eat dinner", meaning: "吃晚饭" },
+            { word: "go to bed", meaning: "上床，睡觉" },
+            { word: "when", meaning: "什么时候，何时" },
+            { word: "every day", meaning: "每天" },
+            { word: "at", meaning: "在……点钟" }
+          ],
+          dialogues: [
+            { question: "When do you get up?", answer: "I get up at seven o'clock." },
+            { question: "When do you eat breakfast?", answer: "I eat breakfast at half past seven." },
+            { question: "When do you go to school?", answer: "I go to school at eight o'clock." },
+            { question: "When do you eat lunch?", answer: "I eat lunch at twelve o'clock." },
+            { question: "When do you go home?", answer: "I go home at four o'clock." },
+            { question: "When do you eat dinner?", answer: "I eat dinner at six o'clock." },
+            { question: "When do you go to bed?", answer: "I go to bed at nine o'clock." },
+            { question: "What do you do every day?", answer: "I get up at seven, eat breakfast at half past seven, and go to school at eight." },
+            { question: "What time do you eat dinner?", answer: "I eat dinner at six o'clock every day." },
+            { question: "I get up at seven o'clock. How about you?", answer: "I get up at six thirty." }
+          ]
+        },
+        {
+          id: 6,
+          name: "My Week",
+          chineseName: "我的一周",
+          theme: "myweek",
+          words: [
+            { word: "Sunday", meaning: "星期天" },
+            { word: "Monday", meaning: "星期一" },
+            { word: "Tuesday", meaning: "星期二" },
+            { word: "Wednesday", meaning: "星期三" },
+            { word: "Thursday", meaning: "星期四" },
+            { word: "Friday", meaning: "星期五" },
+            { word: "Saturday", meaning: "星期六" },
+            { word: "today", meaning: "今天" }
+          ],
+          dialogues: [
+            { question: "What day is it today?", answer: "It's Sunday." },
+            { question: "What day is it today?", answer: "It's Monday." },
+            { question: "What day is it today?", answer: "It's Tuesday." },
+            { question: "What day is it today?", answer: "It's Wednesday." },
+            { question: "What day is it today?", answer: "It's Thursday." },
+            { question: "What day is it today?", answer: "It's Friday." },
+            { question: "What day is it today?", answer: "It's Saturday." },
+            { question: "What do you do on Sunday?", answer: "I visit my grandparents on Sunday." },
+            { question: "What do you do on Monday?", answer: "I go to school on Monday." },
+            { question: "What do you do on Saturday?", answer: "I play football on Saturday." },
+            { question: "What's your favourite day?", answer: "My favourite day is Saturday." },
+            { question: "Why do you like Saturday?", answer: "Because I can play all day." }
+          ]
+        }
+      ];
+      
+      return {
+        getAllUnits: function() {
+          return units;
+        },
+        getUnitById: function(unitId) {
+          return units.find(unit => unit.id === Number(unitId)) || null;
+        },
+        getWordsFromUnit: function(unitId) {
+          const unit = this.getUnitById(unitId);
+          return unit ? unit.words : [];
+        },
+        getDialoguesFromUnit: function(unitId) {
+          const unit = this.getUnitById(unitId);
+          return unit ? unit.dialogues : [];
+        }
+      };
+    })();
+
+    // 应用核心模块
+    const App = (function() {
+      let currentUnitId = null;
+      
+      // 初始化应用
+      function init() {
+        setupEventListeners();
+        showUnitList();
+      }
+
+      // 设置事件监听器
+      function setupEventListeners() {
+        // 单元卡片点击事件
+        document.querySelectorAll('.unit-card').forEach(card => {
+          card.addEventListener('click', function() {
+            const unitId = this.getAttribute('data-unit-id');
+            showUnitContent(unitId);
+          });
+        });
+        
+        // 返回按钮点击事件
+        document.getElementById('backButton').addEventListener('click', navigateBack);
+        
+        // 底部标签导航点击事件
+        document.getElementById('wordListTab').addEventListener('click', function() {
+          showTab('wordListContent');
+          setActiveTab('wordListTab');
+        });
+        
+        document.getElementById('dialogueTab').addEventListener('click', function() {
+          showTab('dialogueContent');
+          setActiveTab('dialogueTab');
+        });
+      }
+      
+      // 显示单元选择列表
+      function showUnitList() {
+        document.getElementById('unitListView').style.display = 'block';
+        document.getElementById('unitContentView').style.display = 'none';
+        document.getElementById('tabNav').style.display = 'none';
+        document.getElementById('backButton').style.display = 'none';
+        document.querySelector('.header h1').textContent = '小学英语口语练习';
+      }
+      
+      // 显示单元内容
+      function showUnitContent(unitId) {
+        currentUnitId = Number(unitId);
+        const unit = DataStore.getUnitById(currentUnitId);
+        
+        if (!unit) return;
+        
+        document.getElementById('unitTitle').textContent = `Unit ${unit.id}: ${unit.name} (${unit.chineseName})`;
+        document.getElementById('unitListView').style.display = 'none';
+        document.getElementById('unitContentView').style.display = 'block';
+        document.getElementById('tabNav').style.display = 'flex';
+        document.getElementById('backButton').style.display = 'block';
+        
+        // 默认显示单词列表
+        showTab('wordListContent');
+        setActiveTab('wordListTab');
+        
+        // 加载单元数据
+        ContentDisplay.showWordList(currentUnitId);
+        ContentDisplay.showDialoguePractice(currentUnitId);
+      }
+      
+      // 显示指定标签内容
+      function showTab(tabId) {
+        document.querySelectorAll('#wordListContent, #dialogueContent').forEach(tab => {
+          tab.style.display = 'none';
+        });
+        document.getElementById(tabId).style.display = 'block';
+      }
+      
+      // 设置活跃标签
+      function setActiveTab(tabId) {
+        document.querySelectorAll('.tab-item').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+      }
+      
+      // 导航返回
+      function navigateBack() {
+        showUnitList();
+      }
+      
+      return {
+        init,
+        showUnitList,
+        showUnitContent,
+        navigateBack
+      };
+    })();
+
+    // 内容展示模块
+    const ContentDisplay = (function() {
+      // 显示单词列表
+      function showWordList(unitId) {
+        const words = DataStore.getWordsFromUnit(unitId);
+        const wordListEl = document.getElementById('wordList');
+        
+        wordListEl.innerHTML = '';
+        
+        words.forEach((word, index) => {
+          const li = document.createElement('li');
+          li.className = 'word-item';
+          li.innerHTML = `
+            <span class="word">${word.word}</span>
+            <span class="meaning">${word.meaning}</span>
+          `;
+          wordListEl.appendChild(li);
+        });
+      }
+      
+      // 显示对话练习
+      function showDialoguePractice(unitId) {
+        const dialogues = DataStore.getDialoguesFromUnit(unitId);
+        const dialogueListEl = document.getElementById('dialogueList');
+        
+        dialogueListEl.innerHTML = '';
+        
+        dialogues.forEach((dialogue, index) => {
+          const li = document.createElement('li');
+          li.className = 'dialogue-item';
+          li.id = `dialogue-${unitId}-${index}`;
+          
+          const answerId = `answer-${unitId}-${index}`;
+          const buttonId = `button-${unitId}-${index}`;
+          
+          li.innerHTML = `
+            <div class="question">${dialogue.question}</div>
+            <div class="answer-container">
+              <button id="${buttonId}" class="show-answer-btn" data-answer-id="${answerId}">显示答案</button>
+              <div id="${answerId}" class="answer">${dialogue.answer}</div>
+            </div>
+          `;
+          
+          dialogueListEl.appendChild(li);
+          
+          // 为每个按钮添加事件监听
+          setTimeout(() => {
+            const button = document.getElementById(buttonId);
+            if (button) {
+              button.addEventListener('click', function() {
+                toggleAnswerVisibility(this.getAttribute('data-answer-id'), this);
+              });
+            }
+          }, 0);
+        });
+      }
+      
+      // 切换答案可见性
+      function toggleAnswerVisibility(answerId, buttonEl) {
+        const answerEl = document.getElementById(answerId);
+        
+        if (answerEl.style.display === 'block') {
+          answerEl.style.display = 'none';
+          buttonEl.textContent = '显示答案';
+        } else {
+          answerEl.style.display = 'block';
+          buttonEl.textContent = '隐藏答案';
+        }
+      }
+      
+      return {
+        showWordList,
+        showDialoguePractice
+      };
+    })();
+
+    // 应用初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      App.init();
+    });
+  </script>
+</body>
+</html>
