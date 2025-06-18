@@ -62,6 +62,39 @@
       overflow-y: auto;
     }
 
+    /* 年级选择样式 */
+    .grade-list {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 15px;
+      padding: 10px;
+    }
+    .grade-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 25px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .grade-card:hover {
+      transform: scale(1.02);
+    }
+    .grade-card h2 {
+      margin-bottom: 5px;
+      font-size: 1.3rem;
+      color: #333;
+    }
+    .grade-card p {
+      color: #666;
+      font-size: 1rem;
+    }
+    .grade-1-1 { background-color: #B3E5FC; }
+    .grade-1-2 { background-color: #81D4FA; }
+    .grade-2-1 { background-color: #FFECB3; }
+    .grade-2-2 { background-color: #FFE082; }
+    
     /* 单元列表样式 */
     .unit-list {
       display: grid;
@@ -203,39 +236,32 @@
     </header>
 
     <main class="main-content" id="mainContent">
-      <!-- 单元列表，初始显示 -->
-      <div id="unitListView">
-        <div class="unit-list">
-          <div class="unit-card unit-1" data-unit-id="1">
-            <h2>Unit 1</h2>
-            <p>Playtime</p>
-            <p>游戏时间</p>
+      <!-- 年级选择，初始显示 -->
+      <div id="gradeListView">
+        <div class="grade-list">
+          <div class="grade-card grade-1-1" data-grade="1" data-semester="1">
+            <h2>一年级上册</h2>
+            <p>人教版（一年级起点）</p>
           </div>
-          <div class="unit-card unit-2" data-unit-id="2">
-            <h2>Unit 2</h2>
-            <p>Weather</p>
-            <p>天气</p>
+          <div class="grade-card grade-1-2" data-grade="1" data-semester="2">
+            <h2>一年级下册</h2>
+            <p>人教版（一年级起点）</p>
           </div>
-          <div class="unit-card unit-3" data-unit-id="3">
-            <h2>Unit 3</h2>
-            <p>Seasons</p>
-            <p>季节</p>
+          <div class="grade-card grade-2-1" data-grade="2" data-semester="1">
+            <h2>二年级上册</h2>
+            <p>人教版（一年级起点）</p>
           </div>
-          <div class="unit-card unit-4" data-unit-id="4">
-            <h2>Unit 4</h2>
-            <p>Time</p>
-            <p>时间</p>
+          <div class="grade-card grade-2-2" data-grade="2" data-semester="2">
+            <h2>二年级下册</h2>
+            <p>人教版（一年级起点）</p>
           </div>
-          <div class="unit-card unit-5" data-unit-id="5">
-            <h2>Unit 5</h2>
-            <p>My Day</p>
-            <p>我的一天</p>
-          </div>
-          <div class="unit-card unit-6" data-unit-id="6">
-            <h2>Unit 6</h2>
-            <p>My Week</p>
-            <p>我的一周</p>
-          </div>
+        </div>
+      </div>
+
+      <!-- 单元列表，初始隐藏 -->
+      <div id="unitListView" class="content-area">
+        <div class="unit-list" id="unitListContainer">
+          <!-- 单元卡片将通过JavaScript动态生成 -->
         </div>
       </div>
 
@@ -262,196 +288,689 @@
   <script>
     // 数据存储模块
     const DataStore = (function() {
-      // 所有单元的数据
-      const units = [
-        {
-          id: 1,
-          name: "Playtime",
-          chineseName: "游戏时间",
-          theme: "playtime",
-          words: [
-            { word: "play football", meaning: "踢足球" },
-            { word: "fly a kite", meaning: "放风筝" },
-            { word: "ride a bike", meaning: "骑自行车" },
-            { word: "make a model plane", meaning: "做飞机模型" },
-            { word: "swim", meaning: "游泳" },
-            { word: "make a snowman", meaning: "堆雪人" },
-            { word: "can't", meaning: "不能，不会" }
+      // 按年级学期和单元组织的数据
+      const grades = {
+        1: { // 一年级
+          1: [ // 上册
+            {
+              id: 1,
+              name: "School",
+              chineseName: "学校",
+              theme: "school",
+              words: [
+                { word: "book", meaning: "书，书本" },
+                { word: "ruler", meaning: "尺子" },
+                { word: "pencil", meaning: "铅笔" },
+                { word: "schoolbag", meaning: "书包" },
+                { word: "teacher", meaning: "教师" },
+                { word: "I", meaning: "我" },
+                { word: "have", meaning: "有" },
+                { word: "a/an", meaning: "一（个）" }
+              ],
+              dialogues: [
+                { question: "I have a pencil.", answer: "I have a pencil." },
+                { question: "I have a ruler.", answer: "I have a ruler." },
+                { question: "I have a book.", answer: "I have a book." },
+                { question: "Stand up, Joy.", answer: "Show me your pencil." },
+                { question: "Sit down, please.", answer: "OK." },
+                { question: "Close your eyes.", answer: "My eyes are closed." },
+                { question: "Open your eyes. What's missing?", answer: "The ruler is missing." },
+                { question: "Show me your schoolbag.", answer: "Here is my schoolbag." },
+                { question: "Open it.", answer: "It's open." },
+                { question: "Show me your ruler.", answer: "I have a ruler." }
+              ]
+            },
+            {
+              id: 2,
+              name: "Face",
+              chineseName: "脸",
+              theme: "face",
+              words: [
+                { word: "face", meaning: "脸" },
+                { word: "ear", meaning: "耳朵" },
+                { word: "eye", meaning: "眼睛" },
+                { word: "nose", meaning: "鼻子" },
+                { word: "mouth", meaning: "嘴巴" },
+                { word: "this", meaning: "这（个）" },
+                { word: "is", meaning: "是" },
+                { word: "my", meaning: "我的" }
+              ],
+              dialogues: [
+                { question: "Touch your mouth.", answer: "This is my mouth." },
+                { question: "Touch your nose.", answer: "This is my nose." },
+                { question: "Touch your eye.", answer: "This is my eye." },
+                { question: "Touch your ear.", answer: "This is my ear." },
+                { question: "Touch your face.", answer: "This is my face." },
+                { question: "Touch your mouth.", answer: "This is my mouth." }
+              ]
+            },
+            {
+              id: 3,
+              name: "Animals",
+              chineseName: "动物",
+              theme: "animals",
+              words: [
+                { word: "dog", meaning: "狗" },
+                { word: "bird", meaning: "鸟" },
+                { word: "tiger", meaning: "老虎" },
+                { word: "monkey", meaning: "猴子" },
+                { word: "cat", meaning: "猫" },
+                { word: "what", meaning: "什么" },
+                { word: "it", meaning: "它" }
+              ],
+              dialogues: [
+                { question: "What's this?", answer: "It's a tiger." },
+                { question: "What's this?", answer: "It's a dog." },
+                { question: "What's this?", answer: "It's a bird." },
+                { question: "What's this?", answer: "It's a monkey." },
+                { question: "What's this?", answer: "It's a cat." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Numbers",
+              chineseName: "数字",
+              theme: "numbers",
+              words: [
+                { word: "one", meaning: "一" },
+                { word: "two", meaning: "二" },
+                { word: "three", meaning: "三" },
+                { word: "four", meaning: "四" },
+                { word: "five", meaning: "五" },
+                { word: "six", meaning: "六" },
+                { word: "seven", meaning: "七" },
+                { word: "eight", meaning: "八" },
+                { word: "nine", meaning: "九" },
+                { word: "ten", meaning: "十" },
+                { word: "how", meaning: "多少" },
+                { word: "many", meaning: "多的，许多的" },
+                { word: "are", meaning: "是" },
+                { word: "there", meaning: "（代替主语）" }
+              ],
+              dialogues: [
+                { question: "How many birds are there?", answer: "Nine." },
+                { question: "How many tigers are there?", answer: "Three." },
+                { question: "How many dogs are there?", answer: "Five." },
+                { question: "How many monkeys are there?", answer: "Six." },
+                { question: "How many are there?", answer: "One, two, three..." }
+              ]
+            },
+            {
+              id: 5,
+              name: "Colours",
+              chineseName: "颜色",
+              theme: "colours",
+              words: [
+                { word: "black", meaning: "黑色；黑色的" },
+                { word: "yellow", meaning: "黄色；黄色的" },
+                { word: "blue", meaning: "蓝色；蓝色的" },
+                { word: "red", meaning: "红色；红色的" },
+                { word: "green", meaning: "绿色；绿色的" },
+                { word: "colour", meaning: "颜色" }
+              ],
+              dialogues: [
+                { question: "What colour is it?", answer: "It's yellow." },
+                { question: "What colour is it?", answer: "It's red." },
+                { question: "What colour is it?", answer: "It's green." },
+                { question: "What colour is it?", answer: "It's blue." },
+                { question: "What colour is it?", answer: "It's black." },
+                { question: "Guess! What's this?", answer: "It's yellow. It's a pencil." },
+                { question: "A red balloon, please.", answer: "Here you are." },
+                { question: "A yellow balloon, and a green balloon!", answer: "Here you are." }
+              ]
+            },
+            {
+              id: 6,
+              name: "Fruit",
+              chineseName: "水果",
+              theme: "fruit",
+              words: [
+                { word: "apple", meaning: "苹果" },
+                { word: "pear", meaning: "梨" },
+                { word: "banana", meaning: "香蕉" },
+                { word: "orange", meaning: "柑橘；橙" },
+                { word: "do", meaning: "（助动词）" },
+                { word: "you", meaning: "你；你们" },
+                { word: "like", meaning: "喜欢，喜爱" }
+              ],
+              dialogues: [
+                { question: "Do you like bananas?", answer: "Yes, I do." },
+                { question: "Do you like pears?", answer: "No, I don't." },
+                { question: "Do you like apples?", answer: "Yes, I do." },
+                { question: "Do you like oranges?", answer: "Yes, I do." },
+                { question: "Do you like fish?", answer: "No, I don't." },
+                { question: "Do you like bananas?", answer: "Yes, I do." }
+              ]
+            }
           ],
-          dialogues: [
-            { question: "Can you play football?", answer: "Yes, I can." },
-            { question: "Can you fly a kite?", answer: "Yes, I can." },
-            { question: "Can you ride a bike?", answer: "Yes, I can." },
-            { question: "Can you make a model plane?", answer: "No, I can't." },
-            { question: "What are they doing?", answer: "They are playing football." },
-            { question: "What are you doing?", answer: "I am flying a kite." },
-            { question: "Do you like to swim?", answer: "Yes, I do." },
-            { question: "What do you like to do?", answer: "I like to ride a bike." }
+          2: [ // 下册
+            {
+              id: 1,
+              name: "Classroom",
+              chineseName: "教室",
+              theme: "classroom",
+              words: [
+                { word: "chair", meaning: "椅子" },
+                { word: "desk", meaning: "书桌" },
+                { word: "blackboard", meaning: "黑板" },
+                { word: "on", meaning: "在...上" },
+                { word: "under", meaning: "在...下方" },
+                { word: "in", meaning: "在...里面" },
+                { word: "where", meaning: "在哪里" },
+                { word: "the", meaning: "定冠词" }
+              ],
+              dialogues: [
+                { question: "Where is the ruler?", answer: "It's on the desk." },
+                { question: "Where is the pencil?", answer: "It's under the chair." },
+                { question: "Where is the book?", answer: "It's in the schoolbag." },
+                { question: "Where is the blackboard?", answer: "It's in front of the classroom." },
+                { question: "Where is the chair?", answer: "It's behind the desk." },
+                { question: "Under the chair?", answer: "Yes, under the chair." }
+              ]
+            },
+            {
+              id: 2,
+              name: "Room",
+              chineseName: "房间",
+              theme: "room",
+              words: [
+                { word: "light", meaning: "灯" },
+                { word: "bed", meaning: "床" },
+                { word: "door", meaning: "门" },
+                { word: "box", meaning: "盒子" },
+                { word: "near", meaning: "靠近" },
+                { word: "behind", meaning: "在...背后" }
+              ],
+              dialogues: [
+                { question: "What's behind the door?", answer: "There's a box behind the door." },
+                { question: "What's under the bed?", answer: "There's a toy under the bed." },
+                { question: "What's near the light?", answer: "There's a box near the light." },
+                { question: "What's on the bed?", answer: "There's a book on the bed." },
+                { question: "What's in the box?", answer: "There's a toy in the box." }
+              ]
+            },
+            {
+              id: 3,
+              name: "Toys",
+              chineseName: "玩具",
+              theme: "toys",
+              words: [
+                { word: "plane", meaning: "飞机" },
+                { word: "ball", meaning: "球" },
+                { word: "doll", meaning: "玩具娃娃" },
+                { word: "train", meaning: "火车" },
+                { word: "car", meaning: "小汽车" },
+                { word: "bear", meaning: "玩具熊" },
+                { word: "can", meaning: "能够" },
+                { word: "sure", meaning: "当然" },
+                { word: "sorry", meaning: "抱歉" }
+              ],
+              dialogues: [
+                { question: "Can I have a car?", answer: "Sure." },
+                { question: "Can I have a bear?", answer: "Sorry, no." },
+                { question: "Can I have a ball?", answer: "Sure, here you are." },
+                { question: "Can I have a plane?", answer: "Sure, take this one." },
+                { question: "Can I have a doll?", answer: "Sorry, I don't have a doll." },
+                { question: "Can I have a train?", answer: "Yes, here you are." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Food",
+              chineseName: "食物",
+              theme: "food",
+              words: [
+                { word: "rice", meaning: "米饭" },
+                { word: "noodles", meaning: "面条" },
+                { word: "vegetable", meaning: "蔬菜" },
+                { word: "fish", meaning: "鱼" },
+                { word: "chicken", meaning: "鸡肉" },
+                { word: "egg", meaning: "鸡蛋" },
+                { word: "hungry", meaning: "饥饿的" },
+                { word: "want", meaning: "想要" },
+                { word: "and", meaning: "和" }
+              ],
+              dialogues: [
+                { question: "I'm hungry. I want rice and vegetables.", answer: "Here you are." },
+                { question: "I'm hungry. I want noodles.", answer: "Here you are." },
+                { question: "I'm hungry. I want chicken and rice.", answer: "Here you are." },
+                { question: "I'm hungry. I want fish and vegetables.", answer: "Here you are." },
+                { question: "Oh, no! I'm hungry!", answer: "Let me get you some food." },
+                { question: "I want eggs for breakfast.", answer: "Here are your eggs." }
+              ]
+            },
+            {
+              id: 5,
+              name: "Drink",
+              chineseName: "饮料",
+              theme: "drink",
+              words: [
+                { word: "juice", meaning: "果汁" },
+                { word: "tea", meaning: "茶" },
+                { word: "milk", meaning: "牛奶" },
+                { word: "water", meaning: "水" },
+                { word: "thirsty", meaning: "口渴的" },
+                { word: "thanks", meaning: "感谢" }
+              ],
+              dialogues: [
+                { question: "I'm thirsty. Do you want water?", answer: "No, thanks. I want juice." },
+                { question: "I'm thirsty. Do you want tea?", answer: "No, thanks. I want water." },
+                { question: "I'm thirsty. Do you want milk?", answer: "Yes, please. I love milk." },
+                { question: "I'm thirsty. Do you want juice?", answer: "Yes, please." },
+                { question: "Do you want tea or water?", answer: "I want tea, please." }
+              ]
+            },
+            {
+              id: 6,
+              name: "Clothes",
+              chineseName: "衣服",
+              theme: "clothes",
+              words: [
+                { word: "shirt", meaning: "衬衫" },
+                { word: "T-shirt", meaning: "T恤衫" },
+                { word: "skirt", meaning: "裙子" },
+                { word: "dress", meaning: "连衣裙" },
+                { word: "socks", meaning: "短袜" },
+                { word: "shorts", meaning: "短裤" },
+                { word: "your", meaning: "你的" }
+              ],
+              dialogues: [
+                { question: "I like your skirt.", answer: "Thank you." },
+                { question: "I like your shirt.", answer: "Thanks, it's new." },
+                { question: "I like your T-shirt.", answer: "Thank you very much." },
+                { question: "I like your dress.", answer: "Thank you. I like it too." },
+                { question: "I like your socks.", answer: "Thanks, they're new." },
+                { question: "I like your shorts.", answer: "Thank you." }
+              ]
+            }
           ]
         },
-        {
-          id: 2,
-          name: "Weather",
-          chineseName: "天气",
-          theme: "weather",
-          words: [
-            { word: "rainy", meaning: "下雨的" },
-            { word: "cloudy", meaning: "多云的" },
-            { word: "snowy", meaning: "下雪的" },
-            { word: "windy", meaning: "刮风的" },
-            { word: "sunny", meaning: "晴朗的" },
-            { word: "umbrella", meaning: "雨伞" },
-            { word: "weather", meaning: "天气" },
-            { word: "wow", meaning: "哇" },
-            { word: "let's", meaning: "让我们……" }
+        2: { // 二年级
+          1: [ // 上册
+            {
+              id: 1,
+              name: "My Family",
+              chineseName: "我的家庭",
+              theme: "family",
+              words: [
+                { word: "father", meaning: "父亲/爸爸" },
+                { word: "mother", meaning: "母亲/妈妈" },
+                { word: "brother", meaning: "兄弟" },
+                { word: "sister", meaning: "姐妹" },
+                { word: "grandmother", meaning: "祖母/外祖母" },
+                { word: "grandfather", meaning: "祖父/外祖父" },
+                { word: "who", meaning: "谁" },
+                { word: "he", meaning: "他" },
+                { word: "she", meaning: "她" }
+              ],
+              dialogues: [
+                { question: "Who's he?", answer: "He is my father." },
+                { question: "Who's she?", answer: "She is my mother." },
+                { question: "Mary, this is my grandmother.", answer: "Welcome!" },
+                { question: "Who's he?", answer: "He is Jack, my brother." },
+                { question: "Who's she?", answer: "She is Linda, my sister." },
+                { question: "Who's he?", answer: "He is my grandfather." }
+              ]
+            },
+            {
+              id: 2,
+              name: "Boys and Girls",
+              chineseName: "男孩与女孩",
+              theme: "people",
+              words: [
+                { word: "classmate", meaning: "同班同学" },
+                { word: "friend", meaning: "朋友" },
+                { word: "woman", meaning: "女人" },
+                { word: "girl", meaning: "女孩" },
+                { word: "man", meaning: "男人" },
+                { word: "boy", meaning: "男孩" },
+                { word: "look", meaning: "看" },
+                { word: "his", meaning: "他的" },
+                { word: "name", meaning: "名字" },
+                { word: "her", meaning: "她的" },
+                { word: "or", meaning: "还是" }
+              ],
+              dialogues: [
+                { question: "What's his name?", answer: "His name is Sam." },
+                { question: "What's her name?", answer: "Her name is Candy." },
+                { question: "Who is he?", answer: "Is he a boy? Is he a man? Is he a tiger?" },
+                { question: "Oh, he's my friend! His name is Tiny!", answer: "Nice to meet him." },
+                { question: "Look at the girl. What's her name?", answer: "Her name is Amy." },
+                { question: "Is he your classmate or your friend?", answer: "He's my classmate." }
+              ]
+            },
+            {
+              id: 3,
+              name: "My Friends",
+              chineseName: "我的朋友",
+              theme: "friends",
+              words: [
+                { word: "big", meaning: "大的" },
+                { word: "tall", meaning: "高的" },
+                { word: "pretty", meaning: "漂亮的" },
+                { word: "thin", meaning: "瘦的" },
+                { word: "short", meaning: "矮的" },
+                { word: "handsome", meaning: "英俊的" },
+                { word: "new", meaning: "新的" },
+                { word: "does", meaning: "助动词" }
+              ],
+              dialogues: [
+                { question: "What does he look like?", answer: "He is tall." },
+                { question: "What does she look like?", answer: "She is pretty." },
+                { question: "I have a new classmate. He is tall...", answer: "Guess and say." },
+                { question: "I have a friend. She is a girl.", answer: "She is tall and pretty. She is Yaoyao." },
+                { question: "What does your brother look like?", answer: "He is short and handsome." },
+                { question: "What does your friend look like?", answer: "She is tall and thin." }
+              ]
+            },
+            {
+              id: 4,
+              name: "In the Community",
+              chineseName: "社区",
+              theme: "community",
+              words: [
+                { word: "bookshop", meaning: "书店" },
+                { word: "zoo", meaning: "动物园" },
+                { word: "school", meaning: "学校" },
+                { word: "supermarket", meaning: "超市" },
+                { word: "park", meaning: "公园" },
+                { word: "hospital", meaning: "医院" },
+                { word: "go", meaning: "去" },
+                { word: "to", meaning: "向/朝" }
+              ],
+              dialogues: [
+                { question: "Where are you going?", answer: "I'm going to the zoo." },
+                { question: "Where are you going?", answer: "I'm going to the park." },
+                { question: "Where are we going today?", answer: "We're going to the park!" },
+                { question: "Where are we going today?", answer: "No. We just stay at home." },
+                { question: "Where are you going?", answer: "I'm going to the bookshop." },
+                { question: "Where are you going?", answer: "I'm going to the hospital to see my grandma." }
+              ]
+            },
+            {
+              id: 5,
+              name: "In the Park",
+              chineseName: "公园",
+              theme: "park",
+              words: [
+                { word: "grass", meaning: "草" },
+                { word: "tree", meaning: "树" },
+                { word: "flower", meaning: "花" },
+                { word: "boat", meaning: "小船" },
+                { word: "lake", meaning: "湖" },
+                { word: "hill", meaning: "小山" }
+              ],
+              dialogues: [
+                { question: "Look, there is a boat on the lake.", answer: "Yes, it's a nice boat." },
+                { question: "There are trees in the park.", answer: "They are very tall." },
+                { question: "There are birds in the park.", answer: "They are pretty." },
+                { question: "Is there a lake in the park?", answer: "Yes, there is." },
+                { question: "Are there flowers near the tree?", answer: "Yes, there are many beautiful flowers." },
+                { question: "Is there a hill in the park?", answer: "Yes, and we can climb it." }
+              ]
+            },
+            {
+              id: 6,
+              name: "Happy Holidays",
+              chineseName: "节日",
+              theme: "holidays",
+              words: [
+                { word: "Christmas", meaning: "圣诞节" },
+                { word: "Father Christmas", meaning: "圣诞老人" },
+                { word: "Christmas tree", meaning: "圣诞树" },
+                { word: "card", meaning: "贺卡" },
+                { word: "present", meaning: "礼物" },
+                { word: "New Year", meaning: "新年" },
+                { word: "merry", meaning: "愉快的" },
+                { word: "too", meaning: "也" },
+                { word: "here", meaning: "这儿" },
+                { word: "for", meaning: "为" },
+                { word: "thank", meaning: "谢谢" },
+                { word: "happy", meaning: "幸福的" }
+              ],
+              dialogues: [
+                { question: "Merry Christmas, Mum!", answer: "Here is a present for you." },
+                { question: "Happy New Year!", answer: "Here is a card for you." },
+                { question: "Merry Christmas, Bill!", answer: "You too!" },
+                { question: "Do you like the Christmas tree?", answer: "Yes, it's beautiful." },
+                { question: "Thank you for the present!", answer: "You're welcome. Merry Christmas!" },
+                { question: "Happy New Year, Dad!", answer: "Happy New Year, my dear!" }
+              ]
+            }
           ],
-          dialogues: [
-            { question: "What's the weather like today?", answer: "It's sunny." },
-            { question: "What's the weather like today?", answer: "It's rainy." },
-            { question: "What's the weather like today?", answer: "It's cloudy." },
-            { question: "What's the weather like today?", answer: "It's snowy." },
-            { question: "What's the weather like today?", answer: "It's windy." },
-            { question: "It's sunny today. What shall we do?", answer: "Let's play football." },
-            { question: "It's rainy today. What shall we do?", answer: "Let's take an umbrella." },
-            { question: "It's snowy today. What shall we do?", answer: "Let's make a snowman." },
-            { question: "I like sunny days. How about you?", answer: "I like snowy days." }
-          ]
-        },
-        {
-          id: 3,
-          name: "Seasons",
-          chineseName: "季节",
-          theme: "seasons",
-          words: [
-            { word: "spring", meaning: "春天" },
-            { word: "summer", meaning: "夏天" },
-            { word: "autumn", meaning: "秋天" },
-            { word: "winter", meaning: "冬天" },
-            { word: "hot", meaning: "炎热的" },
-            { word: "warm", meaning: "温暖的" },
-            { word: "cool", meaning: "凉爽的" },
-            { word: "cold", meaning: "寒冷的" },
-            { word: "favourite", meaning: "最喜欢的" },
-            { word: "season", meaning: "季节" }
-          ],
-          dialogues: [
-            { question: "What's your favourite season?", answer: "My favourite season is spring." },
-            { question: "What's your favourite season?", answer: "My favourite season is summer." },
-            { question: "What's your favourite season?", answer: "My favourite season is autumn." },
-            { question: "What's your favourite season?", answer: "My favourite season is winter." },
-            { question: "What's spring like?", answer: "Spring is warm." },
-            { question: "What's summer like?", answer: "Summer is hot." },
-            { question: "What's autumn like?", answer: "Autumn is cool." },
-            { question: "What's winter like?", answer: "Winter is cold." },
-            { question: "What do you like to do in spring?", answer: "I like spring. I can fly a kite." },
-            { question: "What do you like to do in summer?", answer: "I like summer. I can swim." }
-          ]
-        },
-        {
-          id: 4,
-          name: "Time",
-          chineseName: "时间",
-          theme: "time",
-          words: [
-            { word: "eleven", meaning: "十一" },
-            { word: "twelve", meaning: "十二" },
-            { word: "twenty", meaning: "二十" },
-            { word: "thirty", meaning: "三十" },
-            { word: "forty", meaning: "四十" },
-            { word: "fifty", meaning: "五十" },
-            { word: "thirteen", meaning: "十三" },
-            { word: "fourteen", meaning: "十四" },
-            { word: "fifteen", meaning: "十五" },
-            { word: "time", meaning: "时间" },
-            { word: "playtime", meaning: "游戏时间，课间休息时间" }
-          ],
-          dialogues: [
-            { question: "What time is it?", answer: "It's eleven o'clock." },
-            { question: "What time is it?", answer: "It's twelve o'clock." },
-            { question: "What time is it?", answer: "It's three o'clock." },
-            { question: "What time is it now?", answer: "It's half past seven." },
-            { question: "It's playtime. What shall we do?", answer: "Let's play football." },
-            { question: "It's twelve o'clock. What time is it?", answer: "It's time for lunch." },
-            { question: "It's three o'clock. What shall we do?", answer: "Let's go home." },
-            { question: "Can you tell me the time?", answer: "It's twenty past four." },
-            { question: "When is your English class?", answer: "It's at ten o'clock." }
-          ]
-        },
-        {
-          id: 5,
-          name: "My Day",
-          chineseName: "我的一天",
-          theme: "myday",
-          words: [
-            { word: "get up", meaning: "起床" },
-            { word: "eat breakfast", meaning: "吃早饭" },
-            { word: "go to school", meaning: "上学" },
-            { word: "eat lunch", meaning: "吃午饭" },
-            { word: "go home", meaning: "回家" },
-            { word: "eat dinner", meaning: "吃晚饭" },
-            { word: "go to bed", meaning: "上床，睡觉" },
-            { word: "when", meaning: "什么时候，何时" },
-            { word: "every day", meaning: "每天" },
-            { word: "at", meaning: "在……点钟" }
-          ],
-          dialogues: [
-            { question: "When do you get up?", answer: "I get up at seven o'clock." },
-            { question: "When do you eat breakfast?", answer: "I eat breakfast at half past seven." },
-            { question: "When do you go to school?", answer: "I go to school at eight o'clock." },
-            { question: "When do you eat lunch?", answer: "I eat lunch at twelve o'clock." },
-            { question: "When do you go home?", answer: "I go home at four o'clock." },
-            { question: "When do you eat dinner?", answer: "I eat dinner at six o'clock." },
-            { question: "When do you go to bed?", answer: "I go to bed at nine o'clock." },
-            { question: "What do you do every day?", answer: "I get up at seven, eat breakfast at half past seven, and go to school at eight." },
-            { question: "What time do you eat dinner?", answer: "I eat dinner at six o'clock every day." },
-            { question: "I get up at seven o'clock. How about you?", answer: "I get up at six thirty." }
-          ]
-        },
-        {
-          id: 6,
-          name: "My Week",
-          chineseName: "我的一周",
-          theme: "myweek",
-          words: [
-            { word: "Sunday", meaning: "星期天" },
-            { word: "Monday", meaning: "星期一" },
-            { word: "Tuesday", meaning: "星期二" },
-            { word: "Wednesday", meaning: "星期三" },
-            { word: "Thursday", meaning: "星期四" },
-            { word: "Friday", meaning: "星期五" },
-            { word: "Saturday", meaning: "星期六" },
-            { word: "today", meaning: "今天" }
-          ],
-          dialogues: [
-            { question: "What day is it today?", answer: "It's Sunday." },
-            { question: "What day is it today?", answer: "It's Monday." },
-            { question: "What day is it today?", answer: "It's Tuesday." },
-            { question: "What day is it today?", answer: "It's Wednesday." },
-            { question: "What day is it today?", answer: "It's Thursday." },
-            { question: "What day is it today?", answer: "It's Friday." },
-            { question: "What day is it today?", answer: "It's Saturday." },
-            { question: "What do you do on Sunday?", answer: "I visit my grandparents on Sunday." },
-            { question: "What do you do on Monday?", answer: "I go to school on Monday." },
-            { question: "What do you do on Saturday?", answer: "I play football on Saturday." },
-            { question: "What's your favourite day?", answer: "My favourite day is Saturday." },
-            { question: "Why do you like Saturday?", answer: "Because I can play all day." }
+          2: [ // 下册
+            {
+              id: 1,
+              name: "Playtime",
+              chineseName: "游戏时间",
+              theme: "playtime",
+              words: [
+                { word: "play football", meaning: "踢足球" },
+                { word: "fly a kite", meaning: "放风筝" },
+                { word: "ride a bike", meaning: "骑自行车" },
+                { word: "make a model plane", meaning: "做飞机模型" },
+                { word: "swim", meaning: "游泳" },
+                { word: "make a snowman", meaning: "堆雪人" },
+                { word: "can't", meaning: "不能，不会" }
+              ],
+              dialogues: [
+                { question: "Can you play football?", answer: "Yes, I can." },
+                { question: "Can you fly a kite?", answer: "Yes, I can." },
+                { question: "Can you ride a bike?", answer: "Yes, I can." },
+                { question: "Can you make a model plane?", answer: "No, I can't." },
+                { question: "What are they doing?", answer: "They are playing football." },
+                { question: "What are you doing?", answer: "I am flying a kite." },
+                { question: "Do you like to swim?", answer: "Yes, I do." },
+                { question: "What do you like to do?", answer: "I like to ride a bike." }
+              ]
+            },
+            {
+              id: 2,
+              name: "Weather",
+              chineseName: "天气",
+              theme: "weather",
+              words: [
+                { word: "rainy", meaning: "下雨的" },
+                { word: "cloudy", meaning: "多云的" },
+                { word: "snowy", meaning: "下雪的" },
+                { word: "windy", meaning: "刮风的" },
+                { word: "sunny", meaning: "晴朗的" },
+                { word: "umbrella", meaning: "雨伞" },
+                { word: "weather", meaning: "天气" },
+                { word: "wow", meaning: "哇" },
+                { word: "let's", meaning: "让我们……" }
+              ],
+              dialogues: [
+                { question: "What's the weather like today?", answer: "It's sunny." },
+                { question: "What's the weather like today?", answer: "It's rainy." },
+                { question: "What's the weather like today?", answer: "It's cloudy." },
+                { question: "What's the weather like today?", answer: "It's snowy." },
+                { question: "What's the weather like today?", answer: "It's windy." },
+                { question: "It's sunny today. What shall we do?", answer: "Let's play football." },
+                { question: "It's rainy today. What shall we do?", answer: "Let's take an umbrella." },
+                { question: "It's snowy today. What shall we do?", answer: "Let's make a snowman." },
+                { question: "I like sunny days. How about you?", answer: "I like snowy days." }
+              ]
+            },
+            {
+              id: 3,
+              name: "Seasons",
+              chineseName: "季节",
+              theme: "seasons",
+              words: [
+                { word: "spring", meaning: "春天" },
+                { word: "summer", meaning: "夏天" },
+                { word: "autumn", meaning: "秋天" },
+                { word: "winter", meaning: "冬天" },
+                { word: "hot", meaning: "炎热的" },
+                { word: "warm", meaning: "温暖的" },
+                { word: "cool", meaning: "凉爽的" },
+                { word: "cold", meaning: "寒冷的" },
+                { word: "favourite", meaning: "最喜欢的" },
+                { word: "season", meaning: "季节" }
+              ],
+              dialogues: [
+                { question: "What's your favourite season?", answer: "My favourite season is spring." },
+                { question: "What's your favourite season?", answer: "My favourite season is summer." },
+                { question: "What's your favourite season?", answer: "My favourite season is autumn." },
+                { question: "What's your favourite season?", answer: "My favourite season is winter." },
+                { question: "What's spring like?", answer: "Spring is warm." },
+                { question: "What's summer like?", answer: "Summer is hot." },
+                { question: "What's autumn like?", answer: "Autumn is cool." },
+                { question: "What's winter like?", answer: "Winter is cold." },
+                { question: "What do you like to do in spring?", answer: "I like spring. I can fly a kite." },
+                { question: "What do you like to do in summer?", answer: "I like summer. I can swim." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Time",
+              chineseName: "时间",
+              theme: "time",
+              words: [
+                { word: "eleven", meaning: "十一" },
+                { word: "twelve", meaning: "十二" },
+                { word: "twenty", meaning: "二十" },
+                { word: "thirty", meaning: "三十" },
+                { word: "forty", meaning: "四十" },
+                { word: "fifty", meaning: "五十" },
+                { word: "thirteen", meaning: "十三" },
+                { word: "fourteen", meaning: "十四" },
+                { word: "fifteen", meaning: "十五" },
+                { word: "time", meaning: "时间" },
+                { word: "playtime", meaning: "游戏时间，课间休息时间" }
+              ],
+              dialogues: [
+                { question: "What time is it?", answer: "It's eleven o'clock." },
+                { question: "What time is it?", answer: "It's twelve o'clock." },
+                { question: "What time is it?", answer: "It's three o'clock." },
+                { question: "What time is it now?", answer: "It's half past seven." },
+                { question: "It's playtime. What shall we do?", answer: "Let's play football." },
+                { question: "It's twelve o'clock. What time is it?", answer: "It's time for lunch." },
+                { question: "It's three o'clock. What shall we do?", answer: "Let's go home." },
+                { question: "Can you tell me the time?", answer: "It's twenty past four." },
+                { question: "When is your English class?", answer: "It's at ten o'clock." }
+              ]
+            },
+            {
+              id: 5,
+              name: "My Day",
+              chineseName: "我的一天",
+              theme: "myday",
+              words: [
+                { word: "get up", meaning: "起床" },
+                { word: "eat breakfast", meaning: "吃早饭" },
+                { word: "go to school", meaning: "上学" },
+                { word: "eat lunch", meaning: "吃午饭" },
+                { word: "go home", meaning: "回家" },
+                { word: "eat dinner", meaning: "吃晚饭" },
+                { word: "go to bed", meaning: "上床，睡觉" },
+                { word: "when", meaning: "什么时候，何时" },
+                { word: "every day", meaning: "每天" },
+                { word: "at", meaning: "在……点钟" }
+              ],
+              dialogues: [
+                { question: "When do you get up?", answer: "I get up at seven o'clock." },
+                { question: "When do you eat breakfast?", answer: "I eat breakfast at half past seven." },
+                { question: "When do you go to school?", answer: "I go to school at eight o'clock." },
+                { question: "When do you eat lunch?", answer: "I eat lunch at twelve o'clock." },
+                { question: "When do you go home?", answer: "I go home at four o'clock." },
+                { question: "When do you eat dinner?", answer: "I eat dinner at six o'clock." },
+                { question: "When do you go to bed?", answer: "I go to bed at nine o'clock." },
+                { question: "What do you do every day?", answer: "I get up at seven, eat breakfast at half past seven, and go to school at eight." },
+                { question: "What time do you eat dinner?", answer: "I eat dinner at six o'clock every day." },
+                { question: "I get up at seven o'clock. How about you?", answer: "I get up at six thirty." }
+              ]
+            },
+            {
+              id: 6,
+              name: "My Week",
+              chineseName: "我的一周",
+              theme: "myweek",
+              words: [
+                { word: "Sunday", meaning: "星期天" },
+                { word: "Monday", meaning: "星期一" },
+                { word: "Tuesday", meaning: "星期二" },
+                { word: "Wednesday", meaning: "星期三" },
+                { word: "Thursday", meaning: "星期四" },
+                { word: "Friday", meaning: "星期五" },
+                { word: "Saturday", meaning: "星期六" },
+                { word: "today", meaning: "今天" }
+              ],
+              dialogues: [
+                { question: "What day is it today?", answer: "It's Sunday." },
+                { question: "What day is it today?", answer: "It's Monday." },
+                { question: "What day is it today?", answer: "It's Tuesday." },
+                { question: "What day is it today?", answer: "It's Wednesday." },
+                { question: "What day is it today?", answer: "It's Thursday." },
+                { question: "What day is it today?", answer: "It's Friday." },
+                { question: "What day is it today?", answer: "It's Saturday." },
+                { question: "What do you do on Sunday?", answer: "I visit my grandparents on Sunday." },
+                { question: "What do you do on Monday?", answer: "I go to school on Monday." },
+                { question: "What do you do on Saturday?", answer: "I play football on Saturday." },
+                { question: "What's your favourite day?", answer: "My favourite day is Saturday." },
+                { question: "Why do you like Saturday?", answer: "Because I can play all day." }
+              ]
+            }
           ]
         }
-      ];
+      };
+      
+      // 获取所有年级
+      function getAllGradeOptions() {
+        const options = [];
+        for (const grade in grades) {
+          for (const semester in grades[grade]) {
+            options.push({
+              grade: Number(grade),
+              semester: Number(semester)
+            });
+          }
+        }
+        return options;
+      }
+      
+      // 获取年级和学期描述
+      function getGradeDescription(grade, semester) {
+        const gradeNames = {
+          1: "一年级",
+          2: "二年级"
+        };
+        const semesterNames = {
+          1: "上册",
+          2: "下册"
+        };
+        
+        return `${gradeNames[grade]}${semesterNames[semester]}`;
+      }
       
       return {
-        getAllUnits: function() {
-          return units;
+        // 获取所有年级和学期选项
+        getAllGradeOptions: getAllGradeOptions,
+        
+        // 获取年级描述
+        getGradeDescription: getGradeDescription,
+        
+        // 获取特定年级和学期的所有单元
+        getUnitsByGradeSemester: function(grade, semester) {
+          return (grades[grade] && grades[grade][semester]) ? grades[grade][semester] : [];
         },
-        getUnitById: function(unitId) {
+        
+        // 根据年级、学期和单元ID获取单元
+        getUnitById: function(grade, semester, unitId) {
+          const units = this.getUnitsByGradeSemester(grade, semester);
           return units.find(unit => unit.id === Number(unitId)) || null;
         },
-        getWordsFromUnit: function(unitId) {
-          const unit = this.getUnitById(unitId);
+        
+        // 获取特定单元的所有单词
+        getWordsFromUnit: function(grade, semester, unitId) {
+          const unit = this.getUnitById(grade, semester, unitId);
           return unit ? unit.words : [];
         },
-        getDialoguesFromUnit: function(unitId) {
-          const unit = this.getUnitById(unitId);
+        
+        // 获取特定单元的所有对话
+        getDialoguesFromUnit: function(grade, semester, unitId) {
+          const unit = this.getUnitById(grade, semester, unitId);
           return unit ? unit.dialogues : [];
         }
       };
@@ -459,21 +978,25 @@
 
     // 应用核心模块
     const App = (function() {
+      let currentGrade = null;
+      let currentSemester = null;
       let currentUnitId = null;
+      let navigationHistory = [];
       
       // 初始化应用
       function init() {
         setupEventListeners();
-        showUnitList();
+        showGradeList();
       }
 
       // 设置事件监听器
       function setupEventListeners() {
-        // 单元卡片点击事件
-        document.querySelectorAll('.unit-card').forEach(card => {
+        // 年级卡片点击事件
+        document.querySelectorAll('.grade-card').forEach(card => {
           card.addEventListener('click', function() {
-            const unitId = this.getAttribute('data-unit-id');
-            showUnitContent(unitId);
+            const grade = Number(this.getAttribute('data-grade'));
+            const semester = Number(this.getAttribute('data-semester'));
+            showUnitList(grade, semester);
           });
         });
         
@@ -492,19 +1015,66 @@
         });
       }
       
-      // 显示单元选择列表
-      function showUnitList() {
-        document.getElementById('unitListView').style.display = 'block';
+      // 显示年级选择列表
+      function showGradeList() {
+        document.getElementById('gradeListView').style.display = 'block';
+        document.getElementById('unitListView').style.display = 'none';
         document.getElementById('unitContentView').style.display = 'none';
         document.getElementById('tabNav').style.display = 'none';
         document.getElementById('backButton').style.display = 'none';
         document.querySelector('.header h1').textContent = '小学英语口语练习';
+        
+        currentGrade = null;
+        currentSemester = null;
+        currentUnitId = null;
+        navigationHistory = [];
+      }
+      
+      // 显示单元选择列表
+      function showUnitList(grade, semester) {
+        currentGrade = grade;
+        currentSemester = semester;
+        navigationHistory.push('grade');
+        
+        const units = DataStore.getUnitsByGradeSemester(currentGrade, currentSemester);
+        const unitListContainer = document.getElementById('unitListContainer');
+        
+        // 更新标题
+        const gradeText = DataStore.getGradeDescription(grade, semester);
+        document.querySelector('.header h1').textContent = gradeText;
+        
+        // 清空并重新填充单元列表
+        unitListContainer.innerHTML = '';
+        units.forEach(unit => {
+          const unitCard = document.createElement('div');
+          unitCard.className = `unit-card unit-${unit.id}`;
+          unitCard.setAttribute('data-unit-id', unit.id);
+          unitCard.innerHTML = `
+            <h2>Unit ${unit.id}</h2>
+            <p>${unit.name}</p>
+            <p>${unit.chineseName}</p>
+          `;
+          unitCard.addEventListener('click', function() {
+            const unitId = this.getAttribute('data-unit-id');
+            showUnitContent(unitId);
+          });
+          unitListContainer.appendChild(unitCard);
+        });
+        
+        // 显示单元列表视图
+        document.getElementById('gradeListView').style.display = 'none';
+        document.getElementById('unitListView').style.display = 'block';
+        document.getElementById('unitContentView').style.display = 'none';
+        document.getElementById('tabNav').style.display = 'none';
+        document.getElementById('backButton').style.display = 'block';
       }
       
       // 显示单元内容
       function showUnitContent(unitId) {
         currentUnitId = Number(unitId);
-        const unit = DataStore.getUnitById(currentUnitId);
+        navigationHistory.push('unit');
+        
+        const unit = DataStore.getUnitById(currentGrade, currentSemester, currentUnitId);
         
         if (!unit) return;
         
@@ -512,15 +1082,14 @@
         document.getElementById('unitListView').style.display = 'none';
         document.getElementById('unitContentView').style.display = 'block';
         document.getElementById('tabNav').style.display = 'flex';
-        document.getElementById('backButton').style.display = 'block';
         
         // 默认显示单词列表
         showTab('wordListContent');
         setActiveTab('wordListTab');
         
         // 加载单元数据
-        ContentDisplay.showWordList(currentUnitId);
-        ContentDisplay.showDialoguePractice(currentUnitId);
+        ContentDisplay.showWordList(currentGrade, currentSemester, currentUnitId);
+        ContentDisplay.showDialoguePractice(currentGrade, currentSemester, currentUnitId);
       }
       
       // 显示指定标签内容
@@ -541,11 +1110,23 @@
       
       // 导航返回
       function navigateBack() {
-        showUnitList();
+        if (navigationHistory.length === 0) {
+          showGradeList();
+          return;
+        }
+        
+        const lastState = navigationHistory.pop();
+        
+        if (lastState === 'unit') {
+          showUnitList(currentGrade, currentSemester);
+        } else if (lastState === 'grade') {
+          showGradeList();
+        }
       }
       
       return {
         init,
+        showGradeList,
         showUnitList,
         showUnitContent,
         navigateBack
@@ -555,8 +1136,8 @@
     // 内容展示模块
     const ContentDisplay = (function() {
       // 显示单词列表
-      function showWordList(unitId) {
-        const words = DataStore.getWordsFromUnit(unitId);
+      function showWordList(grade, semester, unitId) {
+        const words = DataStore.getWordsFromUnit(grade, semester, unitId);
         const wordListEl = document.getElementById('wordList');
         
         wordListEl.innerHTML = '';
@@ -573,8 +1154,8 @@
       }
       
       // 显示对话练习
-      function showDialoguePractice(unitId) {
-        const dialogues = DataStore.getDialoguesFromUnit(unitId);
+      function showDialoguePractice(grade, semester, unitId) {
+        const dialogues = DataStore.getDialoguesFromUnit(grade, semester, unitId);
         const dialogueListEl = document.getElementById('dialogueList');
         
         dialogueListEl.innerHTML = '';
@@ -582,10 +1163,10 @@
         dialogues.forEach((dialogue, index) => {
           const li = document.createElement('li');
           li.className = 'dialogue-item';
-          li.id = `dialogue-${unitId}-${index}`;
+          li.id = `dialogue-${grade}-${semester}-${unitId}-${index}`;
           
-          const answerId = `answer-${unitId}-${index}`;
-          const buttonId = `button-${unitId}-${index}`;
+          const answerId = `answer-${grade}-${semester}-${unitId}-${index}`;
+          const buttonId = `button-${grade}-${semester}-${unitId}-${index}`;
           
           li.innerHTML = `
             <div class="question">${dialogue.question}</div>
