@@ -65,15 +65,15 @@
     /* 年级选择样式 */
     .grade-list {
       display: grid;
-      grid-template-columns: repeat(1, 1fr);
-      gap: 15px;
-      padding: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 8px;
     }
     .grade-card {
       background-color: white;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      padding: 25px 20px;
+      padding: 16px 12px;
       text-align: center;
       cursor: pointer;
       transition: transform 0.2s ease;
@@ -82,18 +82,32 @@
       transform: scale(1.02);
     }
     .grade-card h2 {
-      margin-bottom: 5px;
-      font-size: 1.3rem;
+      margin-bottom: 3px;
+      font-size: 1.1rem;
       color: #333;
     }
     .grade-card p {
       color: #666;
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
+    /* 一年级颜色 - 蓝色系 */
     .grade-1-1 { background-color: #B3E5FC; }
     .grade-1-2 { background-color: #81D4FA; }
+    /* 二年级颜色 - 黄色系 */
     .grade-2-1 { background-color: #FFECB3; }
     .grade-2-2 { background-color: #FFE082; }
+    /* 三年级颜色 - 绿色系 */
+    .grade-3-1 { background-color: #C8E6C9; }
+    .grade-3-2 { background-color: #A5D6A7; }
+    /* 四年级颜色 - 紫色系 */
+    .grade-4-1 { background-color: #E1BEE7; }
+    .grade-4-2 { background-color: #CE93D8; }
+    /* 五年级颜色 - 橙色系 */
+    .grade-5-1 { background-color: #FFCCBC; }
+    .grade-5-2 { background-color: #FFAB91; }
+    /* 六年级颜色 - 灰色系 */
+    .grade-6-1 { background-color: #D7CCC8; }
+    .grade-6-2 { background-color: #BCAAA4; }
     
     /* 单元列表样式 */
     .unit-list {
@@ -226,6 +240,17 @@
       padding: 20px;
       color: #999;
     }
+    /* 年级分类标题 */
+    .grade-section-title {
+      margin: 15px 0 8px 5px;
+      font-size: 1rem;
+      color: #666;
+      border-left: 4px solid #4a90e2;
+      padding-left: 8px;
+    }
+    .grade-section-title:first-child {
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
@@ -238,6 +263,7 @@
     <main class="main-content" id="mainContent">
       <!-- 年级选择，初始显示 -->
       <div id="gradeListView">
+        <h3 class="grade-section-title">一年级</h3>
         <div class="grade-list">
           <div class="grade-card grade-1-1" data-grade="1" data-semester="1">
             <h2>一年级上册</h2>
@@ -247,12 +273,59 @@
             <h2>一年级下册</h2>
             <p>人教版（一年级起点）</p>
           </div>
+        </div>
+        <h3 class="grade-section-title">二年级</h3>
+        <div class="grade-list">
           <div class="grade-card grade-2-1" data-grade="2" data-semester="1">
             <h2>二年级上册</h2>
             <p>人教版（一年级起点）</p>
           </div>
           <div class="grade-card grade-2-2" data-grade="2" data-semester="2">
             <h2>二年级下册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+        </div>
+        <h3 class="grade-section-title">三年级</h3>
+        <div class="grade-list">
+          <div class="grade-card grade-3-1" data-grade="3" data-semester="1">
+            <h2>三年级上册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+          <div class="grade-card grade-3-2" data-grade="3" data-semester="2">
+            <h2>三年级下册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+        </div>
+        <h3 class="grade-section-title">四年级</h3>
+        <div class="grade-list">
+          <div class="grade-card grade-4-1" data-grade="4" data-semester="1">
+            <h2>四年级上册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+          <div class="grade-card grade-4-2" data-grade="4" data-semester="2">
+            <h2>四年级下册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+        </div>
+        <h3 class="grade-section-title">五年级</h3>
+        <div class="grade-list">
+          <div class="grade-card grade-5-1" data-grade="5" data-semester="1">
+            <h2>五年级上册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+          <div class="grade-card grade-5-2" data-grade="5" data-semester="2">
+            <h2>五年级下册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+        </div>
+        <h3 class="grade-section-title">六年级</h3>
+        <div class="grade-list">
+          <div class="grade-card grade-6-1" data-grade="6" data-semester="1">
+            <h2>六年级上册</h2>
+            <p>人教版（一年级起点）</p>
+          </div>
+          <div class="grade-card grade-6-2" data-grade="6" data-semester="2">
+            <h2>六年级下册</h2>
             <p>人教版（一年级起点）</p>
           </div>
         </div>
@@ -392,7 +465,7 @@
                 { question: "How many tigers are there?", answer: "Three." },
                 { question: "How many dogs are there?", answer: "Five." },
                 { question: "How many monkeys are there?", answer: "Six." },
-                { question: "How many are there?", answer: "One, two, three..." }
+                { question: "How many xxs are there?", answer: "One, two, three..." }
               ]
             },
             {
@@ -438,7 +511,7 @@
                 { question: "Do you like pears?", answer: "No, I don't." },
                 { question: "Do you like apples?", answer: "Yes, I do." },
                 { question: "Do you like oranges?", answer: "Yes, I do." },
-                { question: "Do you like fish?", answer: "No, I don't." },
+                { question: "Do you like fish?", answer: "Oh, no, a banana! Do you like bananas?" },
                 { question: "Do you like bananas?", answer: "Yes, I do." }
               ]
             }
@@ -553,10 +626,14 @@
                 { word: "thanks", meaning: "感谢" }
               ],
               dialogues: [
-                { question: "I'm thirsty. Do you want water?", answer: "No, thanks. I want juice." },
-                { question: "I'm thirsty. Do you want tea?", answer: "No, thanks. I want water." },
-                { question: "I'm thirsty. Do you want milk?", answer: "Yes, please. I love milk." },
-                { question: "I'm thirsty. Do you want juice?", answer: "Yes, please." },
+                { question: "I'm thirsty. ", answer: "Do you want water? " },
+				{ question: "Do you want water? ", answer: "No, thanks. I want juice." },
+                { question: "I'm thirsty. ", answer: "Do you want tea? " },
+				{ question: "Do you want tea? ", answer: "No, thanks. I want water." },
+                { question: "I'm thirsty. ", answer: "Do you want milk? " },
+				{ question: "Do you want milk?", answer: " Yes, please. I love milk." },
+                { question: "I'm thirsty. ", answer: "Do you want juice? Yes, please." },
+				{ question: "Do you want juice? ", answer: "Yes, please." },
                 { question: "Do you want tea or water?", answer: "I want tea, please." }
               ]
             },
@@ -658,7 +735,7 @@
                 { question: "What does he look like?", answer: "He is tall." },
                 { question: "What does she look like?", answer: "She is pretty." },
                 { question: "I have a new classmate. He is tall...", answer: "Guess and say." },
-                { question: "I have a friend. She is a girl.", answer: "She is tall and pretty. She is Yaoyao." },
+                { question: "I have a friend. She is a girl. She is tall and pretty.", answer: " She is Yaoyao." },
                 { question: "What does your brother look like?", answer: "He is short and handsome." },
                 { question: "What does your friend look like?", answer: "She is tall and thin." }
               ]
@@ -783,8 +860,8 @@
               dialogues: [
                 { question: "What's the weather like today?", answer: "It's sunny." },
                 { question: "What's the weather like today?", answer: "It's rainy." },
-                { question: "What's the weather like today?", answer: "It's cloudy." },
-                { question: "What's the weather like today?", answer: "It's snowy." },
+                { question: "What's the weather like in Shanghai?", answer: "It's cloudy." },
+                { question: "What's the weather like in Beijing?", answer: "It's snowy." },
                 { question: "What's the weather like today?", answer: "It's windy." },
                 { question: "It's sunny today. What shall we do?", answer: "Let's play football." },
                 { question: "It's rainy today. What shall we do?", answer: "Let's take an umbrella." },
@@ -810,7 +887,7 @@
                 { word: "season", meaning: "季节" }
               ],
               dialogues: [
-                { question: "What's your favourite season?", answer: "My favourite season is spring." },
+                { question: "What's your favourite season?", answer: "My favourite season is spring. It's warm and windy." },
                 { question: "What's your favourite season?", answer: "My favourite season is summer." },
                 { question: "What's your favourite season?", answer: "My favourite season is autumn." },
                 { question: "What's your favourite season?", answer: "My favourite season is winter." },
@@ -819,7 +896,10 @@
                 { question: "What's autumn like?", answer: "Autumn is cool." },
                 { question: "What's winter like?", answer: "Winter is cold." },
                 { question: "What do you like to do in spring?", answer: "I like spring. I can fly a kite." },
-                { question: "What do you like to do in summer?", answer: "I like summer. I can swim." }
+                { question: "What do you like to do in summer?", answer: "I like summer. I can swim." },
+                { question: "It's hot in summer?", answer: "I like summer. I can swim." },
+                { question: "It's windy in spring?", answer: "I like spring. I can fly a kite." },
+                { question: "It's cold in winter?", answer: "I like winter. I can build a snowman." }
               ]
             },
             {
@@ -843,10 +923,10 @@
               dialogues: [
                 { question: "What time is it?", answer: "It's eleven o'clock." },
                 { question: "What time is it?", answer: "It's twelve o'clock." },
-                { question: "What time is it?", answer: "It's three o'clock." },
+                { question: "What time is it?", answer: "It's three o'clock. It’s playtime." },
                 { question: "What time is it now?", answer: "It's half past seven." },
                 { question: "It's playtime. What shall we do?", answer: "Let's play football." },
-                { question: "It's twelve o'clock. What time is it?", answer: "It's time for lunch." },
+                { question: "What time is it?", answer: "It's twelve o'clock. It's playtime, let's playfootball." },
                 { question: "It's three o'clock. What shall we do?", answer: "Let's go home." },
                 { question: "Can you tell me the time?", answer: "It's twenty past four." },
                 { question: "When is your English class?", answer: "It's at ten o'clock." }
@@ -870,7 +950,7 @@
                 { word: "at", meaning: "在……点钟" }
               ],
               dialogues: [
-                { question: "When do you get up?", answer: "I get up at seven o'clock." },
+                { question: "When do you get up every day?", answer: "I get up at seven o'clock." },
                 { question: "When do you eat breakfast?", answer: "I eat breakfast at half past seven." },
                 { question: "When do you go to school?", answer: "I go to school at eight o'clock." },
                 { question: "When do you eat lunch?", answer: "I eat lunch at twelve o'clock." },
@@ -899,7 +979,7 @@
               ],
               dialogues: [
                 { question: "What day is it today?", answer: "It's Sunday." },
-                { question: "What day is it today?", answer: "It's Monday." },
+                { question: "What day is it today?", answer: "It's Monday. Let's go to school." },
                 { question: "What day is it today?", answer: "It's Tuesday." },
                 { question: "What day is it today?", answer: "It's Wednesday." },
                 { question: "What day is it today?", answer: "It's Thursday." },
@@ -913,7 +993,1186 @@
               ]
             }
           ]
-        }
+        },
+		3: { // 三年级
+          1: [ // 上册
+            {
+              id: 1,
+              name: "Myself",
+              chineseName: "我自己",
+              theme: "自我介绍与基本信息问答",
+              words: [
+                { word: "my", meaning: "我的" },
+                { word: "your", meaning: "你的" },
+                { word: "name", meaning: "名字" },
+                { word: "new", meaning: "新的" },
+                { word: "year", meaning: "年" },
+                { word: "old", meaning: "岁数" },
+                { word: "how old", meaning: "年龄" },
+                { word: "class", meaning: "班级" },
+                { word: "grade", meaning: "年级" },
+                { word: "age", meaning: "年龄" },
+                { word: "dear", meaning: "亲爱的" }
+              ],
+              dialogues: [
+                { question: "What’s your name?", answer: "I’m Mike." },
+                { question: "How old are you?", answer: "I’m nine years old." },
+                { question: "Which class are you in?", answer: "I’m in class two." },
+                { question: "My name is Sue. I’m new here.", answer: "I’m nine years old. I want to be your friend." },
+                { question: "Hello. My name is Jack.", answer: "I’m eight years old." }
+              ]
+            },
+            {
+              id: 2,
+              name: "My Body",
+              chineseName: "我的身体",
+              theme: "身体部位和受伤描述",
+              words: [
+                { word: "body", meaning: "身体" },
+                { word: "head", meaning: "头" },
+                { word: "hair", meaning: "头发" },
+                { word: "arm", meaning: "胳膊" },
+                { word: "hand", meaning: "手" },
+                { word: "leg", meaning: "腿" },
+                { word: "foot", meaning: "脚" },
+                { word: "hurt", meaning: "疼痛" },
+                { word: "help", meaning: "帮助" },
+                { word: "bad", meaning: "糟糕的" },
+                { word: "bite", meaning: "咬" },
+                { word: "tongue", meaning: "舌头" },
+                { word: "kick", meaning: "踢" }
+              ],
+              dialogues: [
+                { question: "Joy: Ouch! My foot hurts.", answer: "Bill: Let me help you." },
+                { question: "He is Dog. His leg hurts.", answer: "Let me help him." },
+                { question: "She is Rabbit. Her ear hurts.", answer: "Let me help her." }
+              ]
+            },
+            {
+              id: 3,
+              name: "Food",
+              chineseName: "食物",
+              theme: "饮食选择与购物清单",
+              words: [
+                { word: "bread", meaning: "面包" },
+                { word: "cake", meaning: "蛋糕" },
+                { word: "fruit", meaning: "水果" },
+                { word: "ice cream", meaning: "冰淇淋" },
+                { word: "potato", meaning: "土豆" },
+                { word: "tomato", meaning: "西红柿" },
+                { word: "meat", meaning: "肉" },
+                { word: "shopping list", meaning: "购物单" },
+                { word: "rice", meaning: "米饭" },
+                { word: "noodles", meaning: "面条" },
+                { word: "vegetables", meaning: "蔬菜" },
+                { word: "fish", meaning: "鱼肉" },
+                { word: "chicken", meaning: "鸡肉" },
+                { word: "egg", meaning: "鸡蛋" }
+              ],
+              dialogues: [
+                { question: "What do you want for breakfast?", answer: "I want some bread and milk." },
+                { question: "Mum: Let’s have meat, eggs, tomatoes and potatoes for dinner.", answer: "Yaoyao: I want some meat and potatoes." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Pets",
+              chineseName: "宠物",
+              theme: "宠物特征描述与喜好",
+              words: [
+                { word: "duck", meaning: "鸭子" },
+                { word: "chicken", meaning: "小鸡" },
+                { word: "rabbit", meaning: "兔子" },
+                { word: "pet", meaning: "宠物" },
+                { word: "snake", meaning: "蛇" },
+                { word: "turtle", meaning: "海龟" },
+                { word: "small", meaning: "小的" },
+                { word: "long", meaning: "长的" },
+                { word: "tail", meaning: "尾巴" },
+                { word: "dance", meaning: "跳舞" }
+              ],
+              dialogues: [
+                { question: "Binbin: What does it look like?", answer: "It’s white with long ears and red eyes." },
+                { question: "Do you have a pet?", answer: "Yes. I have a duck. It’s yellow with short legs." }
+              ]
+            },
+            {
+              id: 5,
+              name: "Clothes",
+              chineseName: "衣服",
+              theme: "穿衣建议与衣物名称",
+              words: [
+                { word: "cap", meaning: "帽子" },
+                { word: "coat", meaning: "大衣" },
+                { word: "shoes", meaning: "鞋" },
+                { word: "sweater", meaning: "毛衣" },
+                { word: "jacket", meaning: "夹克衫" },
+                { word: "gloves", meaning: "手套" },
+                { word: "trousers", meaning: "裤子" },
+                { word: "should", meaning: "应该" },
+                { word: "wear", meaning: "穿" },
+                { word: "week", meaning: "星期" },
+                { word: "T-shirt", meaning: "T恤" },
+                { word: "shorts", meaning: "短裤" },
+                { word: "socks", meaning: "短袜" }
+              ],
+              dialogues: [
+                { question: "What clothes should I wear in Beijing?", answer: "Mum: You should wear sweater and coat. Wear cap and gloves." },
+                { question: "What clothes should I wear today?", answer: "You should wear your sports shoes.You have PE today." },
+                { question: "Mum, what should I wear today??", answer: "Well, it‛s cold and snowy utside. You should wear your sweater and coat. Wear your cap and gloves, too." },
+                { question: "What should I wear today??", answer: "You should wear a T-shirt and shorts."},
+                { question: "Sydney, November 24.Dear Binbin, How are you? It is summer in Sydney. It‛s very hot. I wear a T-shirt and shorts. I‛m going to Beijing next week! What‛s the weather like in Beijing? What clothes should I wear in Beijing? See you soon, John", answer: "John is going to Beijing next week. It‛s winter in Sydney. John wears a T-shirt and shorts in Sydney."},
+				{ question: "I’m a white rabbit. What should I wear?", answer: "You should wear a white sweater and white gloves."},
+				{ question: "I’m a green turtle. What should I wear?", answer: "You should wear ..."}
+              ]
+            },
+            {
+              id: 6,
+              name: "Birthdays",
+              chineseName: "生日",
+              theme: "生日时间与庆祝活动",
+              words: [
+                { word: "January", meaning: "一月" },
+                { word: "February", meaning: "二月" },
+                { word: "March", meaning: "三月" },
+                { word: "April", meaning: "四月" },
+                { word: "May", meaning: "五月" },
+                { word: "June", meaning: "六月" },
+                { word: "July", meaning: "七月" },
+                { word: "August", meaning: "八月" },
+                { word: "September", meaning: "九月" },
+                { word: "October", meaning: "十月" },
+                { word: "November", meaning: "十一月" },
+                { word: "December", meaning: "十二月" },
+                { word: "birthday", meaning: "生日" },
+                { word: "party", meaning: "聚会" }
+              ],
+              dialogues: [
+                { question: "When is your birthday?", answer: "It’s in November. My birthday is on the first of November."},
+				{ question: "When is your birthday?", answer: "It’s in May."},
+				{ question: "Hi Bill. Can you come to my birthday party?", answer: "Sure. When is your birthday?"},
+				{ question: "When is your birthday?", answer: "It‛s in November, on the first."},
+				{ question: "When is your birthday, John?", answer: "It’s in January/February/March/April/June/July/August/September/October/December."},
+				{ question: "Mother’s Day is on the second Sunday of May.", answer: ""},
+				{ question: "Children’s Day is on June 1.", answer: ""},
+				{ question: "Teachers’ Day is on September 10.", answer: ""},
+				{ question: "Is your birthday in March or April?", answer: "Yes!"},
+				{ question: "Hey Monkey! When’s your birthday?", answer: "I don’t know, but I like cake!"},
+				{ question: "National Day is on October 1.", answer: ""}
+              ]
+            }
+		  ],
+		  2: [ // 下册
+            {
+              id: 1,
+              name: "School Subjects",
+              chineseName: "学校课程",
+              theme: "课程安排与询问",
+              words: [
+                { word: "Chinese", meaning: "语文/汉语" },
+                { word: "English", meaning: "英语" },
+                { word: "science", meaning: "科学" },
+                { word: "PE", meaning: "体育" },
+                { word: "music", meaning: "音乐" },
+                { word: "maths", meaning: "数学" },
+                { word: "art", meaning: "美术" },
+                { word: "computer class", meaning: "计算机课" },
+                { word: "room", meaning: "房间" },
+                { word: "our", meaning: "我们的" },
+                { word: "they", meaning: "他们" }
+              ],
+              dialogues: [
+                { question: "What classes do you have on Monday?", answer: "We have Chinese, art and science." },
+                { question: "What classes do you have on Tuesday?", answer: "We have maths, PE and computer class." },
+                { question: "What classes do you have on Wednesday?", answer: "We have English and music." },
+                { question: "What do you do in English class?", answer: "We do role-plays." },
+                { question: "What do you do in English class?", answer: "We sing songs ans say chants." },
+                { question: "What do you do in English class?", answer: "We talk with our partners." },
+                { question: "What do you do in English class?", answer: "We listen to the tape." },
+                { question: "What class do you like?", answer: "I like science. We can observe and do activities in science class." },
+                { question: "On Monday,Tim doesn't want to get up.", answer: "Get up, it's time for school. I don't want to get up. School is boring." },
+                { question: "In Monday's computer class, Tim writes an email. He is very happy.", answer: "Wow, computer class is so interesting." },
+                { question: "In Tuesday's math class, Sam helps him.", answer: "You can do it.First,..." },
+                { question: "In Wednesday's music class, Tim listens to beatiful music.", answer: "Great music." },
+                { question: "In Thursday's English class, Tim and his classmates play English games.", answer: "This is fun." },
+                { question: "Why does Tim want to go to school on Friday morning?", answer: "I want to go to school." },
+                { question: "What do you do in English class?", answer: "We do role-plays." },
+                { question: "What's your favourite day? What classes do you have on that day?", answer: "Now write back to Mike." }
+              ]
+            },
+            {
+              id: 2,
+              name: "My School",
+              chineseName: "我的学校",
+              theme: "校园设施描述与位置",
+              words: [
+                { word: "classroom", meaning: "教室" },
+                { word: "library", meaning: "图书馆" },
+                { word: "toilet", meaning: "洗手间" },
+                { word: "playground", meaning: "操场" },
+                { word: "first floor", meaning: "第一层" },
+                { word: "second floor", meaning: "第二层" },
+                { word: "third floor", meaning: "第三层" },
+                { word: "chair", meaning: "椅子" },
+                { word: "desk", meaning: "书桌" },
+                { word: "blackboard", meaning: "黑板" }
+              ],
+              dialogues: [
+                { question: "Do you have a computer room in your school?", answer: "No, we don't. But we have computers in our classrooms." },
+                { question: "Do you have a library in your school?", answer: "Yes, we do. It's on the first floor." },
+                { question: "Where is Bill?", answer: "He's in the art room." },
+				{ question: "Do you have a library?", answer: "Yes, we do. It's very big." },
+				{ question: "Where is it?", answer: "It's on the first floor." },
+				{ question: "Do you have a computer room?", answer: "No, we don't. But we have computers in our classrooms." },
+				{ question: "Do you have a toilet?", answer: "Yes, we do." },
+				{ question: "Do you have a big playground?", answer: "No, we don't." },
+				{ question: "What should not we do?", answer: "Don't eat in the computer room/Don't run in the science room/Don't play football in the class room." },
+				{ question: "What should we do?", answer: "Please raise your hand before you speak./Be quiet in the library./Please wear sports shoes in the gym." }
+              ]
+            },
+            {
+              id: 3,
+              name: "After School Activities",
+              chineseName: "课后活动",
+              theme: "活动计划与邀请",
+              words: [
+                { word: "play sports", meaning: "运动" },
+                { word: "draw pictures", meaning: "画画" },
+                { word: "play chess", meaning: "下棋" },
+                { word: "dance", meaning: "跳舞" },
+                { word: "read books", meaning: "阅读" },
+                { word: "play football", meaning: "踢足球" },
+                { word: "fly a kite", meaning: "放风筝" },
+                { word: "ride a bike", meaning: "骑自行车" }
+              ],
+              dialogues: [
+                { question: "Binbin, what are you going to do after school?", answer: "I'm going to play sports after school." },
+                { question: "Can I play with you?", answer: "Sure!" },
+                { question: "He's going to read books. He really likes reading!", answer: "" }
+              ]
+            },
+            {
+              id: 4,
+              name: "My Family",
+              chineseName: "我的家庭",
+              theme: "家庭成员特征描述",
+              words: [
+                { word: "family", meaning: "家庭" },
+                { word: "uncle", meaning: "叔叔/舅舅" },
+                { word: "aunt", meaning: "阿姨/姑姑" },
+                { word: "cousin", meaning: "表亲" },
+                { word: "handsome", meaning: "英俊" },
+                { word: "beautiful", meaning: "美丽" },
+                { word: "grandfather", meaning: "祖父" },
+                { word: "grandmother", meaning: "祖母" },
+                { word: "brother", meaning: "兄弟" },
+                { word: "sister", meaning: "姐妹" }
+              ],
+              dialogues: [
+                { question: "What does he look like?", answer: "He has short hair and big eyes. He's short. He is wearing a green T-shirt and blue shoes." }
+              ]
+            },
+            {
+              id: 5,
+              name: "Family Activities",
+              chineseName: "家庭活动",
+              theme: "正在进行的家庭活动",
+              words: [
+                { word: "cooking dinner", meaning: "做饭" },
+                { word: "walking the dog", meaning: "遛狗" },
+                { word: "watering plants", meaning: "浇花" },
+                { word: "watching TV", meaning: "看电视" },
+                { word: "feeding the fish", meaning: "喂鱼" },
+                { word: "listening to music", meaning: "听音乐" }
+              ],
+              dialogues: [
+                { question: "What are you doing? Can you play with me?", answer: "I'm watching TV. It's basketball, my favourite sport." },
+                { question: "She's cleaning her room now, but we can all play in one hour.", answer: "" }
+              ]
+            },
+            {
+              id: 6,
+              name: "My Home",
+              chineseName: "我的家",
+              theme: "家庭成员的位置与活动",
+              words: [
+                { word: "bedroom", meaning: "卧室" },
+                { word: "living room", meaning: "客厅" },
+                { word: "bathroom", meaning: "浴室" },
+                { word: "dining room", meaning: "餐厅" },
+                { word: "study", meaning: "书房" },
+                { word: "kitchen", meaning: "厨房" },
+                { word: "sofa", meaning: "沙发" },
+                { word: "light", meaning: "灯" },
+                { word: "door", meaning: "门" }
+              ],
+              dialogues: [
+                { question: "Where is your aunt?", answer: "She's in the kitchen. What's she doing?" },
+                { question: "She's cooking.", answer: "" }
+              ]
+            }
+          ]
+		},
+		4: { // 四年级
+          1: [ // 上册
+            {
+              id: 1,
+              name: "Sports and Games",
+              chineseName: "运动与游戏",
+              theme: "运动喜好与参与情况",
+              words: [
+                { word: "running", meaning: "跑步" },
+                { word: "basketball", meaning: "篮球" },
+                { word: "roller skating", meaning: "滑旱冰" },
+                { word: "jumping rope", meaning: "跳绳" },
+                { word: "ping-pong", meaning: "乒乓球" },
+                { word: "interesting", meaning: "有趣的" },
+                { word: "often", meaning: "经常" },
+                { word: "be good at", meaning: "擅长" },
+                { word: "swim", meaning: "游泳" },
+                { word: "friend", meaning: "朋友" },
+                { word: "father", meaning: "父亲" },
+                { word: "get up", meaning: "起床" }
+              ],
+              dialogues: [
+                { question: "Andy: Do you often play basketball?", answer: "Mike: Yes, I do." },
+                { question: "Andy: Are you good at it?", answer: "Mike: Yes, I am." },
+                { question: "Sue: No, I don’t. I often play ping-pong.", answer: "" },
+                { question: "Yaoyao: Here you are! Do you often pick fruit on the weekend?", answer: "Binbin: I often go to a drawing club. It's fun." }
+              ]
+            },
+            {
+              id: 2,
+              name: "On the Weekend",
+              chineseName: "周末活动",
+              theme: "周末做什么",
+              words: [
+                { word: "visit one’s grandparents", meaning: "看望（外）祖父母" },
+                { word: "go to a drawing club", meaning: "去绘画俱乐部" },
+                { word: "pick fruit", meaning: "采摘水果" },
+                { word: "play computer games", meaning: "玩电脑游戏" },
+                { word: "go fishing", meaning: "钓鱼" },
+                { word: "go to the cinema", meaning: "看电影" },
+                { word: "fun", meaning: "有趣的" },
+                { word: "always", meaning: "总是" },
+                { word: "Saturday", meaning: "星期六" },
+                { word: "near", meaning: "靠近" },
+                { word: "day", meaning: "白天" }
+              ],
+              dialogues: [
+                { question: "Lily: Do you often go to the cinema on the weekend?", answer: "Binbin: I often go to a drawing club." },
+                { question: "Yaoyao: What do you do on the weekend?", answer: "Bill: I often visit my grandparents." }
+              ]
+            },
+            {
+              id: 3,
+              name: "Transportation",
+              chineseName: "交通工具",
+              theme: "出行方式与交通选择",
+              words: [
+                { word: "by bus", meaning: "乘公交车" },
+                { word: "by boat", meaning: "乘小船" },
+                { word: "by ship", meaning: "乘轮船" },
+                { word: "by car", meaning: "乘小汽车" },
+                { word: "by bike", meaning: "骑自行车" },
+                { word: "on foot", meaning: "步行" },
+                { word: "by school bus", meaning: "乘校车" },
+                { word: "by subway", meaning: "乘地铁" },
+                { word: "by plane", meaning: "乘飞机" },
+                { word: "by train", meaning: "乘火车" },
+                { word: "park", meaning: "公园" },
+                { word: "apple", meaning: "苹果" }
+              ],
+              dialogues: [
+                { question: "Andy: How do you usually go to school?", answer: "Sue: I usually go to school on foot." },
+                { question: "Joy: Oh, look! A new film is on at Snow Theatre.", answer: "Yaoyao: Sorry. I want to pick apples on Saturday." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Asking for Help",
+              chineseName: "请求帮助",
+              theme: "礼貌用语与求助表达",
+              words: [
+                { word: "pen", meaning: "钢笔" },
+                { word: "knife", meaning: "小刀" },
+                { word: "eraser", meaning: "橡皮" },
+                { word: "crayon", meaning: "蜡笔" },
+                { word: "scissors", meaning: "剪刀" },
+                { word: "glue stick", meaning: "胶棒" },
+                { word: "paper", meaning: "纸" },
+                { word: "use", meaning: "使用" },
+                { word: "please", meaning: "请" },
+                { word: "ruler", meaning: "尺子" },
+                { word: "pencil", meaning: "铅笔" },
+                { word: "schoolbag", meaning: "书包" }
+              ],
+              dialogues: [
+                { question: "Bill: Can I use your glue stick, please?", answer: "Andy: Sorry. I’m using it." },
+                { question: "Lucky: Sure. Here you are.", answer: "" },
+                { question: "Steven: Excuse me. I can’t find my dad.", answer: "Man: Sure." }
+              ]
+            },
+            {
+              id: 5,
+              name: "Safety",
+              chineseName: "安全知识",
+              theme: "安全规则与危险行为",
+              words: [
+                { word: "climb on the window ledge", meaning: "爬窗台" },
+                { word: "dangerous", meaning: "危险的" },
+                { word: "play with fire", meaning: "玩火" },
+                { word: "run down the stairs", meaning: "跑下楼梯" },
+                { word: "sidewalk", meaning: "人行道" },
+                { word: "wait for", meaning: "等待" },
+                { word: "safe", meaning: "安全的" },
+                { word: "safety rule", meaning: "安全规则" },
+                { word: "green", meaning: "绿色的" },
+                { word: "red", meaning: "红色的" },
+                { word: "play football", meaning: "踢足球" }
+              ],
+              dialogues: [
+                { question: "Father: Be careful! Use the sidewalk.", answer: "Policeman: Please wait for the green light. It’s safe." },
+                { question: "Little Bear: I'm lighting firecrackers.", answer: "路人: Don’t run down the stairs." }
+              ]
+            },
+            {
+              id: 6,
+              name: "Jobs",
+              chineseName: "职业",
+              theme: "未来想从事的职业",
+              words: [
+                { word: "nurse", meaning: "护士" },
+                { word: "cook", meaning: "厨师" },
+                { word: "doctor", meaning: "医生" },
+                { word: "bus driver", meaning: "公交司机" },
+                { word: "police officer", meaning: "警官" },
+                { word: "taxi driver", meaning: "出租司机" },
+                { word: "farmer", meaning: "农民" },
+                { word: "worker", meaning: "工人" },
+                { word: "in the future", meaning: "将来" },
+                { word: "teacher", meaning: "老师" },
+                { word: "Monday", meaning: "星期一" }
+              ],
+              dialogues: [
+                { question: "Binbin: I want to be a doctor in the future. What do you want to be?", answer: "Yaoyao: I want to be a nurse." },
+                { question: "猴子: I want a job.", answer: "建议者: You can be a fireman." }
+              ]
+            }
+		  ],
+		  2: [ // 下册
+		    {
+		      id: 1,
+		      name: "My Neighbourhood",
+		      chineseName: "我的街区",
+		      theme: "方位与地点询问",
+		      words: [
+		        { word: "across from", meaning: "在对面" },
+		        { word: "next to", meaning: "紧邻" },
+		        { word: "between", meaning: "在……之间" },
+		        { word: "turn left", meaning: "向左转" },
+		        { word: "turn right", meaning: "向右转" },
+		        { word: "go straight", meaning: "直行" },
+		        { word: "restaurant", meaning: "餐馆" },
+		        { word: "post office", meaning: "邮局" },
+		        { word: "bank", meaning: "银行" },
+		        { word: "grocery", meaning: "食品杂货店" },
+		        { word: "crossroads", meaning: "十字路口" },
+		        { word: "hospital", meaning: "医院" },
+		        { word: "school", meaning: "学校" }
+		      ],
+		      dialogues: [
+		        { question: "Man: Excuse me. Is there a post office in the neighbourhood?", answer: "Lily: Yes, there is. Go straight and turn left at the first crossroads..." },
+		        { question: "Lucky, get some money from the bank, and then get to the post office before 4:30.", answer: "" },
+		        { question: "Joy's mum的行程描述及返家路线说明", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 2,
+		      name: "Cities",
+		      chineseName: "城市生活",
+		      theme: "城市设施与交通",
+		      words: [
+		        { word: "city", meaning: "城市" },
+		        { word: "street", meaning: "街道" },
+		        { word: "sports centre", meaning: "体育中心" },
+		        { word: "hotel", meaning: "宾馆" },
+		        { word: "square", meaning: "广场" },
+		        { word: "station", meaning: "车站" },
+		        { word: "museum", meaning: "博物馆" },
+		        { word: "buy toys", meaning: "买玩具" },
+		        { word: "see a film", meaning: "看电影" },
+		        { word: "go boating", meaning: "划船" },
+		        { word: "take photos", meaning: "照相" }
+		      ],
+		      dialogues: [
+		        { question: "Girl: Excuse me. Where is the toy shop?", answer: "Bill: It's on Banana Street. You can take a bus..." },
+		        { question: "How can I get to the sports centre?", answer: "You can take the subway." }
+		      ]
+		    },
+		    {
+		      id: 3,
+		      name: "Travel Plans",
+		      chineseName: "旅行计划",
+		      theme: "假期旅行安排",
+		      words: [
+		        { word: "sea", meaning: "海" },
+		        { word: "ski", meaning: "滑雪" },
+		        { word: "visit the Mogao Caves", meaning: "参观莫高窟" },
+		        { word: "row a boat", meaning: "划船" },
+		        { word: "take photos", meaning: "照相" },
+		        { word: "summer vacation", meaning: "暑假" },
+		        { word: "once a week", meaning: "一周一次" }
+		      ],
+		      dialogues: [
+		        { question: "Mother: Where do you want to go this summer vacation?", answer: "Son: I want to go to Sanya. I want to swim in the sea..." },
+		        { question: "Today is my birthday. I want to travel...", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 4,
+		      name: "Hobbies",
+		      chineseName: "兴趣爱好",
+		      theme: "表达个人兴趣",
+		      words: [
+		        { word: "reading", meaning: "读书" },
+		        { word: "skateboarding", meaning: "玩滑板" },
+		        { word: "singing", meaning: "唱歌" },
+		        { word: "dancing", meaning: "跳舞" },
+		        { word: "doing jigsaw puzzles", meaning: "拼拼图" },
+		        { word: "collecting erasers", meaning: "收集橡皮" },
+		        { word: "hobby", meaning: "爱好" },
+		        { word: "stamp", meaning: "邮票" }
+		      ],
+		      dialogues: [
+		        { question: "Girl: What are your hobbies?", answer: "Bill: I like doing jigsaw puzzles." },
+		        { question: "Mike: I like collecting erasers...", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 5,
+		      name: "Free Time",
+		      chineseName: "空闲时间",
+		      theme: "活动频率表达",
+		      words: [
+		        { word: "go skating", meaning: "去滑冰" },
+		        { word: "go camping", meaning: "去野营" },
+		        { word: "do the housework", meaning: "做家务" },
+		        { word: "twice a week", meaning: "一周两次" },
+		        { word: "three times a week", meaning: "一周三次" },
+		        { word: "never", meaning: "从不" }
+		      ],
+		      dialogues: [
+		        { question: "Mike: How often do you go skating?", answer: "Lily: I go skating twice a week..." }
+		      ]
+		    },
+		    {
+		      id: 6,
+		      name: "Countries",
+		      chineseName: "国家与文化",
+		      theme: "国际交流与国家特色",
+		      words: [
+		        { word: "Canada", meaning: "加拿大" },
+		        { word: "Australia", meaning: "澳大利亚" },
+		        { word: "the UK", meaning: "英国" },
+		        { word: "the USA", meaning: "美国" },
+		        { word: "China", meaning: "中国" },
+		        { word: "koala", meaning: "考拉" },
+		        { word: "maple leaves", meaning: "枫叶" },
+		        { word: "Big Ben", meaning: "大本钟" },
+		        { word: "Disneyland", meaning: "迪士尼乐园" }
+		      ],
+		      dialogues: [
+		        { question: "Binbin: Where are you from?", answer: "Tom: I'm from the UK. I like making models..." }
+		      ]
+		    }
+		  ]
+		},
+		5: { // 五年级
+          1: [ // 上册
+            {
+              id: 1,
+              name: "Classmates",
+              chineseName: "同学",
+              theme: "描述同学特征",
+              words: [
+                { word: "clever", meaning: "聪明的" },
+                { word: "careless", meaning: "粗心的" },
+                { word: "polite", meaning: "有礼貌的" },
+                { word: "quiet", meaning: "安静的" },
+                { word: "cute", meaning: "可爱的" },
+                { word: "friendly", meaning: "友好的" },
+                { word: "helpful", meaning: "肯帮忙的" },
+                { word: "active", meaning: "活跃的" },
+                { word: "popular", meaning: "受欢迎的" },
+                { word: "talk", meaning: "说话" },
+                { word: "party", meaning: "聚会" },
+                { word: "all", meaning: "全部" },
+                { word: "but", meaning: "但是" },
+                { word: "sometimes", meaning: "有时" },
+                { word: "bark", meaning: "吠，叫" },
+                { word: "forget", meaning: "忘记" },
+                { word: "with", meaning: "同⋯⋯一起" }
+              ],
+              dialogues: [
+                { question: "Yaoyao: Wow, there are so many model planes!", answer: "Bill: Yeah. Tom likes making model planes." },
+                { question: "Yaoyao: What’s Tom like?", answer: "Bill: He’s clever and helpful. He’s very popular, too. We all like him. But sometimes he’s careless." },
+                { question: "Mary: What’s your friend like?", answer: "Peter: He’s active and popular. He’s tall. He has long arms and big hands." }
+              ]
+            },
+            {
+              id: 2,
+              name: "Teachers",
+              chineseName: "老师",
+              theme: "描述教师特征",
+              words: [
+                { word: "wear glasses", meaning: "戴眼镜" },
+                { word: "slim", meaning: "苗条的" },
+                { word: "curly", meaning: "卷曲的" },
+                { word: "straight", meaning: "直的" },
+                { word: "nice", meaning: "好的" },
+                { word: "young", meaning: "年轻的" },
+                { word: "teach", meaning: "教" },
+                { word: "guess", meaning: "猜" },
+                { word: "has", meaning: "有" }
+              ],
+              dialogues: [
+                { question: "Lily: She’s my favourite teacher. Who is she? Guess!", answer: "Bill: What’s she like?" },
+                { question: "Wu Peng: Wow! Look at Mr Zhao! He’s great.", answer: "Yaoyao: Who’s Mr Zhao?" }
+              ]
+            },
+            {
+              id: 3,
+              name: "Animals",
+              chineseName: "动物",
+              theme: "讨论喜爱的动物",
+              words: [
+                { word: "animal", meaning: "动物" },
+                { word: "elephant", meaning: "大象" },
+                { word: "panda", meaning: "熊猫" },
+                { word: "horse", meaning: "马" },
+                { word: "cow", meaning: "奶牛" },
+                { word: "pig", meaning: "猪" },
+                { word: "sheep", meaning: "绵羊" },
+                { word: "bee", meaning: "蜜蜂" },
+                { word: "farm", meaning: "农场" },
+                { word: "fast", meaning: "快的；迅速地" },
+                { word: "why", meaning: "为什么" },
+                { word: "lovely", meaning: "可爱的" },
+                { word: "butterfly", meaning: "蝴蝶" }
+              ],
+              dialogues: [
+                { question: "Binbin: Hi, Linda. What are you doing?", answer: "Linda: I’m drawing a picture of my favourite animal." },
+                { question: "Linda: It’s a big, grey animal.", answer: "Binbin: Yes, my favourite animal is the elephant." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Shopping Day",
+              chineseName: "购物日",
+              theme: "购物场景",
+              words: [
+                { word: "exercise book", meaning: "练习本" },
+                { word: "pencil sharpener", meaning: "铅笔刀" },
+                { word: "a pair of scissors", meaning: "一把剪刀" },
+                { word: "pencil box", meaning: "铅笔盒" },
+                { word: "a box of crayons", meaning: "一盒蜡笔" },
+                { word: "please", meaning: "请" },
+                { word: "only", meaning: "只，仅仅" },
+                { word: "also", meaning: "也" },
+                { word: "saleswoman", meaning: "女售货员" },
+                { word: "great", meaning: "好极了" },
+                { word: "love", meaning: "喜欢" },
+                { word: "how much", meaning: "（价钱）多少" },
+                { word: "a lot", meaning: "很多" }
+              ],
+              dialogues: [
+                { question: "Saleswoman: Good morning. Can I help you?", answer: "Binbin: Yes. I want to buy a present for my friend." }
+              ]
+            },
+            {
+              id: 5,
+              name: "TV Shows",
+              chineseName: "电视节目",
+              theme: "最爱的电视节目",
+              words: [
+                { word: "wonderful", meaning: "精彩的" },
+                { word: "cool", meaning: "酷的" },
+                { word: "fantastic", meaning: "极好的" },
+                { word: "cartoons", meaning: "动画片" },
+                { word: "news shows", meaning: "新闻节目" },
+                { word: "nature shows", meaning: "自然节目" }
+              ],
+              dialogues: [
+                { question: "Andy: Binbin, what are your favourite TV shows?", answer: "Binbin: My favourite TV shows are sports shows." }
+              ]
+            },
+            {
+              id: 6,
+              name: "Chores",
+              chineseName: "家务",
+              theme: "讨论家务活动",
+              words: [
+                { word: "chore", meaning: "家务" },
+                { word: "clean the room", meaning: "打扫房间" },
+                { word: "make the bed", meaning: "整理床铺" },
+                { word: "take out the rubbish", meaning: "倒垃圾" },
+                { word: "wash clothes", meaning: "洗衣服" },
+                { word: "tidy the desk", meaning: "清理书桌" },
+                { word: "sweep the floor", meaning: "扫地" },
+                { word: "call", meaning: "打电话给⋯⋯" }
+              ],
+              dialogues: [
+                { question: "Joy: Hello, Bill. This is Joy. Can you play with me?", answer: "Bill: Sorry, not now. I’m doing my chores." }
+              ]
+            }
+          ],
+		  2: [  // 下册
+		    {
+		      id: 1,
+		      name: "Keeping Healthy",
+		      chineseName: "保持健康",
+		      theme: "健康习惯与疾病表达",
+		      words: [
+		        { word: "too much", meaning: "太多" },
+		        { word: "candy", meaning: "糖果" },
+		        { word: "go to bed", meaning: "去睡觉" },
+		        { word: "early", meaning: "早" },
+		        { word: "exercise", meaning: "锻炼" },
+		        { word: "tired", meaning: "疲倦的" },
+		        { word: "drink", meaning: "喝" },
+		        { word: "before", meaning: "在…之前" },
+		        { word: "dirty", meaning: "肮脏的" },
+		        { word: "always", meaning: "总是" },
+		        { word: "stomachache", meaning: "胃疼" },
+		        { word: "headache", meaning: "头疼" },
+		        { word: "toothache", meaning: "牙疼" },
+		        { word: "a lot of", meaning: "大量" },
+		        { word: "sleepy", meaning: "困倦的" },
+		        { word: "subject", meaning: "学科" },
+		        { word: "mark", meaning: "分数" },
+		        { word: "advice", meaning: "建议" },
+		        { word: "more", meaning: "更多" }
+		      ],
+		      dialogues: [
+		        { question: "What's wrong? I've got a stomachache...", answer: "" },
+		        { question: "I wish for a big dinner... I wish for good health", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 2,
+		      name: "Special Days",
+		      chineseName: "特别的日子",
+		      theme: "节日与日期表达",
+		      words: [
+		        { word: "New Year's Day", meaning: "新年" },
+		        { word: "Tree Planting Day", meaning: "植树节" },
+		        { word: "Mother's Day", meaning: "母亲节" },
+		        { word: "Children's Day", meaning: "儿童节" },
+		        { word: "Father's Day", meaning: "父亲节" },
+		        { word: "Teachers' Day", meaning: "教师节" },
+		        { word: "National Day", meaning: "国庆节" },
+		        { word: "Christmas Day", meaning: "圣诞节" },
+		        { word: "birthday", meaning: "生日" },
+		        { word: "fifth", meaning: "5th" },
+		        { word: "tenth", meaning: "10th" },
+		        { word: "twelfth", meaning: "12th" },
+		        { word: "twenty-fifth", meaning: "25th" },
+		        { word: "plant", meaning: "种植" },
+		        { word: "make a poster", meaning: "制作海报" },
+		        { word: "celebrate", meaning: "庆祝" },
+		        { word: "have a picnic", meaning: "野餐" }
+		      ],
+		      dialogues: [
+		        { question: "When is Tree Planting Day?", answer: "It's on March 12th..." },
+		        { question: "Happy Mother's Day! Mary's mother starts to cry...", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 3,
+		      name: "Making Contact",
+		      chineseName: "沟通方式",
+		      theme: "联系他人的方式",
+		      words: [
+		        { word: "send an email", meaning: "发送邮件" },
+		        { word: "write a letter", meaning: "写信" },
+		        { word: "make a phone call", meaning: "打电话" },
+		        { word: "send a short message", meaning: "发短信" },
+		        { word: "mail a present", meaning: "邮寄礼物" },
+		        { word: "make a video call", meaning: "视频通话" },
+		        { word: "say", meaning: "说" },
+		        { word: "make a card", meaning: "制作卡片" },
+		        { word: "everywhere", meaning: "各处" }
+		      ],
+		      dialogues: [
+		        { question: "We can row a boat there and have a picnic...", answer: "" },
+		        { question: "Where is her house? Her name is Lily Bear...", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 4,
+		      name: "Last Weekend",
+		      chineseName: "上个周末",
+		      theme: "过去活动描述",
+		      words: [
+		        { word: "cleaned the window", meaning: "擦窗户" },
+		        { word: "watched TV", meaning: "看电视" },
+		        { word: "climbed a hill", meaning: "爬山" },
+		        { word: "visited grandparents", meaning: "看望祖父母" },
+		        { word: "danced", meaning: "跳舞" },
+		        { word: "jumped rope", meaning: "跳绳" },
+		        { word: "boring", meaning: "乏味的" },
+		        { word: "delicious", meaning: "美味的" }
+		      ],
+		      dialogues: [
+		        { question: "How was your weekend?", answer: "I watched a football match..." }
+		      ]
+		    },
+		    {
+		      id: 5,
+		      name: "Have a Great Trip",
+		      chineseName: "旅途愉快",
+		      theme: "旅行活动描述",
+		      words: [
+		        { word: "went to the beach", meaning: "去海滩" },
+		        { word: "drank cold drinks", meaning: "喝冷饮" },
+		        { word: "swam", meaning: "游泳" },
+		        { word: "ate ice cream", meaning: "吃冰淇淋" },
+		        { word: "the Stone Forest", meaning: "石林" },
+		        { word: "bought some gifts", meaning: "买礼物" },
+		        { word: "took photos", meaning: "拍照" },
+		        { word: "saw flowers", meaning: "赏花" }
+		      ],
+		      dialogues: [
+		        { question: "Quick collected branches... He was the best camper", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 6,
+		      name: "Growing Up",
+		      chineseName: "成长经历",
+		      theme: "成长过程中的事件",
+		      words: [
+		        { word: "was born", meaning: "出生" },
+		        { word: "started to speak", meaning: "开始说话" },
+		        { word: "learned to walk", meaning: "学走路" },
+		        { word: "learned to ride a bike", meaning: "学骑车" },
+		        { word: "went to kindergarten", meaning: "上幼儿园" },
+		        { word: "went to school", meaning: "上学" },
+		        { word: "learned to swim", meaning: "学游泳" },
+		        { word: "fifteenth", meaning: "15th" }
+		      ],
+		      dialogues: [
+		        { question: "When did you start to use a computer?", answer: "When I was four..." }
+		      ]
+		    }
+		  ]
+		},
+		6: { // 六年级
+          1: [
+            {
+              id: 1,
+              name: "In China",
+              chineseName: "在中国",
+              theme: "描述中国城市与旅行体验",
+              words: [
+                { word: "morning tea", meaning: "早茶" },
+                { word: "soup", meaning: "汤" },
+                { word: "garden", meaning: "花园" },
+                { word: "the Potala Palace", meaning: "布达拉宫" },
+                { word: "the Summer Palace", meaning: "颐和园" },
+                { word: "the Terracotta Army", meaning: "兵马俑" },
+                { word: "vacation", meaning: "假期" },
+                { word: "taste", meaning: "品尝" },
+                { word: "map", meaning: "地图" },
+                { word: "north", meaning: "北" },
+                { word: "south", meaning: "南" },
+                { word: "east", meaning: "东" },
+                { word: "west", meaning: "西" },
+                { word: "famous", meaning: "著名的" },
+                { word: "temple", meaning: "寺" },
+                { word: "around", meaning: "遍及；围绕" },
+                { word: "the Yangtze River", meaning: "长江" },
+                { word: "foggy", meaning: "有雾的" },
+                { word: "spicy", meaning: "辣的" },
+                { word: "silk", meaning: "丝绸" },
+                { word: "forest", meaning: "树林" },
+                { word: "stone", meaning: "石头" }
+              ],
+              dialogues: [
+                { question: "Hi, Andy. How was your summer vacation?", answer: "It was great. I went to Xining..." },
+                { question: "We went there by plane, but you can also go by train...", answer: "" },
+                { question: "Where is Hangzhou?", answer: "It's in the east..." }
+              ]
+            },
+            {
+              id: 2,
+              name: "Around the World",
+              chineseName: "世界之窗",
+              theme: "了解世界国家与文化",
+              words: [
+                { word: "London", meaning: "伦敦" },
+                { word: "Toronto", meaning: "多伦多" },
+                { word: "Sydney", meaning: "悉尼" },
+                { word: "Washington", meaning: "华盛顿" },
+                { word: "the British Museum", meaning: "大英博物馆" },
+                { word: "the CN Tower", meaning: "加拿大国家电视塔" },
+                { word: "kangaroo", meaning: "袋鼠" },
+                { word: "the Opera House", meaning: "（悉尼）歌剧院" },
+                { word: "the White House", meaning: "白宫" },
+                { word: "clock", meaning: "时钟" },
+                { word: "speak", meaning: "讲；说" },
+                { word: "French", meaning: "法语" },
+                { word: "Tower Bridge", meaning: "（伦敦）塔桥" },
+                { word: "the London Eye", meaning: "伦敦眼" },
+                { word: "hiking", meaning: "远足" },
+                { word: "sunrise", meaning: "日出" },
+                { word: "president", meaning: "总统" }
+              ],
+              dialogues: [
+                { question: "Where do you want to go...", answer: "I want to go to Washington..." },
+                { question: "I want to see the White House...", answer: "" },
+                { question: "What do you know about Canada?", answer: "Canada is a big country..." }
+              ]
+            },
+            {
+              id: 3,
+              name: "Animal World",
+              chineseName: "动物世界",
+              theme: "认识不同类别的动物",
+              words: [
+                { word: "reptile", meaning: "爬行动物" },
+                { word: "bird", meaning: "鸟" },
+                { word: "fish", meaning: "鱼" },
+                { word: "mammal", meaning: "哺乳动物" },
+                { word: "insect", meaning: "昆虫" },
+                { word: "penguin", meaning: "企鹅" },
+                { word: "shark", meaning: "鲨鱼" },
+                { word: "whale", meaning: "鲸" },
+                { word: "kind", meaning: "种类" },
+                { word: "metre", meaning: "米" },
+                { word: "spend", meaning: "花费" },
+                { word: "trunk", meaning: "象鼻" },
+                { word: "peanut", meaning: "花生" },
+                { word: "fan", meaning: "扇子" },
+                { word: "tusk", meaning: "（象、野猪等的）长牙" },
+                { word: "Africa", meaning: "非洲" },
+                { word: "Asia", meaning: "亚洲" },
+                { word: "smart", meaning: "聪明的" }
+              ],
+              dialogues: [
+                { question: "What animals do you like?", answer: "I like butterflies. They are insects..." },
+                { question: "Penguins are , but they cannot fly...", answer: "" },
+                { question: "What kind of animals are monkeys?", answer: "They are mammals..." }
+              ]
+            },
+            {
+              id: 4,
+              name: "Feelings",
+              chineseName: "情感表达",
+              theme: "描述情绪与原因",
+              words: [
+                { word: "scared", meaning: "害怕的" },
+                { word: "worried", meaning: "担心的" },
+                { word: "angry", meaning: "生气的" },
+                { word: "proud", meaning: "自豪的；骄傲的" },
+                { word: "sad", meaning: "难过的" },
+                { word: "excited", meaning: "激动的" },
+                { word: "happy", meaning: "高兴的" },
+                { word: "ill", meaning: "有病；不舒服" },
+                { word: "win", meaning: "获胜" },
+                { word: "race", meaning: "赛跑" },
+                { word: "find", meaning: "发现" },
+                { word: "cry", meaning: "哭" },
+                { word: "because", meaning: "因为" },
+                { word: "test", meaning: "测验" },
+                { word: "competition", meaning: "竞赛" },
+                { word: "hurt", meaning: "弄伤" }
+              ],
+              dialogues: [
+                { question: "I am going to sing for my class. I am proud.", answer: "" },
+                { question: "My cousin takes away my model plane. I am .", answer: "" },
+                { question: "You look sad in this picture. Why?", answer: "I was sad because I was ill..." }
+              ]
+            },
+            {
+              id: 5,
+              name: "Famous People",
+              chineseName: "著名人物",
+              theme: "介绍历史名人及其成就",
+              words: [
+                { word: "inventor", meaning: "发明家" },
+                { word: "artist", meaning: "画家；艺术家" },
+                { word: "scientist", meaning: "科学家" },
+                { word: "poet", meaning: "诗人" },
+                { word: "writer", meaning: "作家" },
+                { word: "American", meaning: "美国人；美国的" },
+                { word: "French", meaning: "法国人；法国的" },
+                { word: "Danish", meaning: "丹麦人；丹麦的；丹麦语" },
+                { word: "poem", meaning: "诗；诗歌" },
+                { word: "paint", meaning: "用颜料画" },
+                { word: "invention", meaning: "发明" },
+                { word: "invent", meaning: "发明" },
+                { word: "study", meaning: "学习；研究" },
+                { word: "story", meaning: "故事" },
+                { word: "university", meaning: "大学" },
+                { word: "deaf", meaning: "聋的" },
+                { word: "blind", meaning: "失明的" },
+                { word: "fall", meaning: "落下" }
+              ],
+              dialogues: [
+                { question: "Who's that man?", answer: "He's Thomas Edison..." },
+                { question: "He's famous for writing stories. I like to read his stories...", answer: "" }
+              ]
+            },
+            {
+              id: 6,
+              name: "Winter Vacation",
+              chineseName: "寒假计划",
+              theme: "制定假期活动计划",
+              words: [
+                { word: "dumpling", meaning: "饺子；汤团" },
+                { word: "fan", meaning: "迷；爱好者" },
+                { word: "ice lantern", meaning: "冰灯" },
+                { word: "bring", meaning: "带来" },
+                { word: "be afraid of", meaning: "害怕" },
+                { word: "hear", meaning: "听到" },
+                { word: "pen pal", meaning: "笔友" },
+                { word: "broken", meaning: "损坏了的" },
+                { word: "pity", meaning: "遗憾" },
+                { word: "prize", meaning: "奖（品）" },
+                { word: "look forward to", meaning: "盼望" }
+              ],
+              dialogues: [
+                { question: "Where are you going...", answer: "I'm going to Harbin..." },
+                { question: "I can’t ski now, but I’m going to have skiing lessons...", answer: "" }
+              ]
+            }
+          ],
+		  2: [  // 下册
+		    {
+		      id: 1,
+		      name: "Visiting Canada",
+		      chineseName: "访问加拿大",
+		      theme: "加拿大文化与家庭介绍",
+		      words: [
+		        { word: "live", meaning: "居住；生活" },
+		        { word: "quite", meaning: "很，相当" },
+		        { word: "scarf", meaning: "围巾" },
+		        { word: "airport", meaning: "机场" },
+		        { word: "pupil", meaning: "小学生" },
+		        { word: "arrive", meaning: "到达" },
+		        { word: "meet", meaning: "迎接/遇见/会面" },
+		        { word: "wardrobe", meaning: "衣柜" }
+		      ],
+		      dialogues: [
+		        { question: "Where is Bill going? He's going to Canada. What's the weather like there? What should Bill take with him?", answer: "" },
+		        { question: "It is very cold and snowy in Canada in the winter. Bill takes some sweaters, scarves and a warm coat.", answer: "" },
+		        { question: "My uncle is a famous artist... My aunt is a doctor in a hospital... My grandpa is an artist too.", answer: "" },
+		        { question: "Who is that girl? She is very pretty... She's good at singing, dancing and drawing.", answer: "" },
+		        { question: "When we arrived at Ted's house, his dog Guinness welcomed us... I met Ted's grandparents, uncle, aunt and his cousin Jenny.", answer: "" },
+		        { question: "I am ten years old. I go to Willow Primary School in Canada.", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 2,
+		      name: "All Around Me",
+		      chineseName: "我周围的环境",
+		      theme: "社区与学校环境描述",
+		      words: [
+		        { word: "show...around", meaning: "带领参观" },
+		        { word: "Queen's Park", meaning: "女王公园" },
+		        { word: "art gallery", meaning: "艺术馆" },
+		        { word: "public library", meaning: "公共图书馆" },
+		        { word: "downtown", meaning: "闹市区/市中心" },
+		        { word: "Lake Ontario", meaning: "安大略湖" },
+		        { word: "stadium", meaning: "(露天)体育场" }
+		      ],
+		      dialogues: [
+		        { question: "There are many beautiful buildings in downtown Toronto... My favourite bookshop is there.", answer: "" },
+		        { question: "Draw a map of your neighbourhood and write about it.", answer: "" },
+		        { question: "Where is the music room/library in your school? What other rooms do you have?", answer: "" },
+		        { question: "My new school in Canada is very interesting. We study English and maths every day.", answer: "" },
+		        { question: "Miss Jackson has curly black hair and wears glasses... Sherry is very tall and active.", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 3,
+		      name: "Daily Life",
+		      chineseName: "日常生活",
+		      theme: "作息习惯与健康生活",
+		      words: [
+		        { word: "volunteer", meaning: "志愿者" },
+		        { word: "sandwich", meaning: "三明治" },
+		        { word: "top", meaning: "上边，上面" },
+		        { word: "habit", meaning: "习惯" },
+		        { word: "idea", meaning: "主意/想法/意见" },
+		        { word: "at least", meaning: "至少" },
+		        { word: "less", meaning: "更少" }
+		      ],
+		      dialogues: [
+		        { question: "When does Bill get up? How does Bill go to school? What does Bill do after dinner?", answer: "" },
+		        { question: "On Saturday mornings, I always go to my maths club... Sometimes I help my mum do the dishes.", answer: "" },
+		        { question: "First, put a piece of bread on a plate... Last, put another piece of bread on top.", answer: "" },
+		        { question: "We shouldn't eat too much candy... We should exercise at least one hour a day.", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 4,
+		      name: "Free Time",
+		      chineseName: "空闲时间",
+		      theme: "兴趣爱好与周末活动",
+		      words: [
+		        { word: "hockey", meaning: "曲棍球/冰上曲棍球" },
+		        { word: "together", meaning: "一起" },
+		        { word: "special", meaning: "特殊/特别" }
+		      ],
+		      dialogues: [
+		        { question: "Bill went to many clubs... He goes to a hockey club twice a week.", answer: "" },
+		        { question: "Tina usually goes to a dancing club... This weekend she is going to sing a Chinese song.", answer: "" },
+		        { question: "On Friday evening, Ted showed me his stamps... On Sunday I watched a nature show about Canadian animals.", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 5,
+		      name: "Nature and Culture",
+		      chineseName: "自然与文化",
+		      theme: "季节、节日与动物习性",
+		      words: [
+		        { word: "countryside", meaning: "农村/乡下" },
+		        { word: "Thanksgiving", meaning: "感恩节" },
+		        { word: "roast turkey", meaning: "烤火鸡" },
+		        { word: "squirrel", meaning: "松鼠" },
+		        { word: "swan", meaning: "天鹅" },
+		        { word: "wild goose", meaning: "大雁" },
+		        { word: "frog", meaning: "青蛙" }
+		      ],
+		      dialogues: [
+		        { question: "Beijing has four different seasons... My favourite season is spring.", answer: "" },
+		        { question: "People have a big dinner with their family... They eat mooncakes and enjoy looking at the moon.", answer: "" },
+		        { question: "Squirrels collect seeds... Bears sleep for a long time in the winter.", answer: "" }
+		      ]
+		    },
+		    {
+		      id: 6,
+		      name: "Summer Vacation",
+		      chineseName: "暑假计划",
+		      theme: "旅行与购物体验",
+		      words: [
+		        { word: "English-Chinese dictionary", meaning: "英汉词典" },
+		        { word: "shopping centre", meaning: "购物中心" },
+		        { word: "shopping mall", meaning: "大型综合商业中心" },
+		        { word: "amazing", meaning: "惊人的/神奇的" },
+		        { word: "hot pot", meaning: "火锅" }
+		      ],
+		      dialogues: [
+		        { question: "Tina is going to London... Sherry is going to Washington D.C.", answer: "" },
+		        { question: "I bought a toy panda for my cousin... Bill bought me a kite that looks like a bird.", answer: "" },
+		        { question: "We visited the Terracotta Army... We saw many funny monkeys on Mount Emei.", answer: "" }
+		      ]
+		    }
+		  ]
+		}
       };
       
       // 获取所有年级
@@ -934,7 +2193,11 @@
       function getGradeDescription(grade, semester) {
         const gradeNames = {
           1: "一年级",
-          2: "二年级"
+          2: "二年级",
+          3: "三年级",
+          4: "四年级",
+          5: "五年级",
+          6: "六年级"
         };
         const semesterNames = {
           1: "上册",
