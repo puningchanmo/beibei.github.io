@@ -60,6 +60,7 @@
       flex: 1;
       padding: 15px;
       overflow-y: auto;
+      padding-bottom: 60px; /* 为底部导航栏留白 */
     }
 
     /* 年级选择样式 */
@@ -160,6 +161,13 @@
     .tab-item.active {
       color: #4a90e2;
       border-bottom: 2px solid #4a90e2;
+    }
+    .fixed-bottom {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
     }
 
     /* 内容展示区 */
@@ -352,7 +360,7 @@
       </div>
     </main>
 
-    <nav id="tabNav" class="tab-nav" style="display: none;">
+    <nav id="tabNav" class="tab-nav fixed-bottom" style="display: none;">
       <div id="wordListTab" class="tab-item active">单词列表</div>
       <div id="dialogueTab" class="tab-item">对话练习</div>
     </nav>
