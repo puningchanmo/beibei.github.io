@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学小达人 - 100以内加减乘除法</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .title {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .settings {
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .setting-item {
+            margin: 10px 0;
+        }
+
+        .setting-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .setting-input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .rules {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .game-area {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer {
+            font-size: 2rem;
+            color: #e53935;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 2.5rem;
+            color: #333;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .options {
+            margin: 30px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #42a5f5;
+            background: #e3f2fd;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.5);
+        }
+
+        .option label {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .buttons {
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #42a5f5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e88e5;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #388e3c;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #f57c00;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .feedback {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+
+        .correct {
+            color: #4caf50;
+            animation: bounce 0.6s ease;
+        }
+
+        .incorrect {
+            color: #f44336;
+            animation: shake 0.6s ease;
+        }
+
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
+        }
+
+        .result-correct {
+            border-left-color: #4caf50;
+            background: #e8f5e8;
+        }
+
+        .result-incorrect {
+            border-left-color: #f44336;
+            background: #ffe8e8;
+        }
+
+        .result-unanswered {
+            border-left-color: #999;
+            background: #f5f5f5;
+        }
+
+        .encouragement {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .encouragement.excellent {
+            color: #4caf50;
+        }
+
+        .encouragement.good {
+            color: #ff9800;
+        }
+
+        .encouragement.average {
+            color: #2196f3;
+        }
+
+        .stats {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .stat-item {
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .best-time {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            80% { transform: translateY(-5px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f00;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .question {
+                font-size: 1.8rem;
+            }
+            
+            .option label {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                padding: 10px 15px;
+                font-size: 1rem;
+                margin: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">数学小达人 - 100以内加减乘除法</h1>
+        
+        <div class="settings">
+            <div class="setting-item">
+                <label class="setting-label">答题时间（秒）：</label>
+                <input type="number" id="timeLimit" class="setting-input" min="10" max="300" value="60">
+            </div>
+            <div class="setting-item">
+                <label class="setting-label">题目数量：</label>
+                <input type="number" id="questionCount" class="setting-input" min="5" max="30" value="10">
+            </div>
+        </div>
+
+        <div class="rules">
+            <strong>游戏规则：</strong><br>
+            • 系统会随机生成100以内的加减乘除题目<br>
+            • 每题中至少有一位数字为两位数<br>
+            • 每题有3个备选答案，选择你认为正确的答案<br>
+            • 答对一题得10分，时间到自动结束游戏<br>
+            • 游戏结束后可查看错题回顾
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <div class="timer" id="timer">60</div>
+            <div class="progress" id="progress">准备开始</div>
+            <div class="question" id="question">点击开始挑战</div>
+            
+            <div class="options" id="options">
+                <!-- 选项将动态生成 -->
+            </div>
+            
+            <div class="score" id="score">得分: 0</div>
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" id="startBtn">开始挑战</button>
+                <button class="btn btn-success" id="submitBtn" style="display:none;">提交答案</button>
+                <button class="btn btn-danger" id="skipBtn" style="display:none;">跳过此题</button>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <h3>答题回顾</h3>
+            <div class="stats">
+                <div class="stat-item">总答对题目数: <span id="correctCount">0</span></div>
+                <div class="stat-item">答错题目数: <span id="incorrectCount">0</span></div>
+                <div class="stat-item">平均每道题答题时间: <span id="avgTime">0.0</span>秒</div>
+                <div class="stat-item">最短答题时间: <span id="bestTime" class="best-time">-</span>秒</div>
+            </div>
+            <div id="resultList"></div>
+            <div class="encouragement" id="encouragement"></div>
+            <div class="buttons">
+                <button class="btn btn-warning" id="continueBtn">继续挑战</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MathGame {
+            constructor() {
+                this.timeLimit = 60;
+                this.questionCount = 10;
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.questions = [];
+                this.userAnswers = [];
+                this.timer = null;
+                this.timeLeft = 0;
+                this.isGameActive = false;
+                
+                // 添加答题时间统计
+                this.questionStartTime = 0;
+                this.questionTimes = [];
+                this.bestTime = null;
+                
+                this.initializeElements();
+                this.bindEvents();
+            }
+
+            initializeElements() {
+                this.elements = {
+                    timeLimit: document.getElementById('timeLimit'),
+                    questionCount: document.getElementById('questionCount'),
+                    timer: document.getElementById('timer'),
+                    progress: document.getElementById('progress'),
+                    question: document.getElementById('question'),
+                    options: document.getElementById('options'),
+                    score: document.getElementById('score'),
+                    feedback: document.getElementById('feedback'),
+                    startBtn: document.getElementById('startBtn'),
+                    submitBtn: document.getElementById('submitBtn'),
+                    skipBtn: document.getElementById('skipBtn'),
+                    continueBtn: document.getElementById('continueBtn'),
+                    results: document.getElementById('results'),
+                    gameArea: document.getElementById('gameArea'),
+                    resultList: document.getElementById('resultList'),
+                    encouragement: document.getElementById('encouragement'),
+                    correctCount: document.getElementById('correctCount'),
+                    incorrectCount: document.getElementById('incorrectCount'),
+                    avgTime: document.getElementById('avgTime'),
+                    bestTime: document.getElementById('bestTime')
+                };
+            }
+
+            bindEvents() {
+                this.elements.startBtn.addEventListener('click', () => this.startGame());
+                this.elements.submitBtn.addEventListener('click', () => this.submitAnswer());
+                this.elements.skipBtn.addEventListener('click', () => this.skipQuestion());
+                this.elements.continueBtn.addEventListener('click', () => this.continueChallenge());
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && this.isGameActive) {
+                        if (this.elements.submitBtn.style.display !== 'none') {
+                            this.submitAnswer();
+                        } else if (this.elements.skipBtn.style.display !== 'none') {
+                            this.skipQuestion();
+                        }
+                    }
+                });
+            }
+
+            startGame() {
+                this.timeLimit = parseInt(this.elements.timeLimit.value) || 60;
+                this.questionCount = parseInt(this.elements.questionCount.value) || 10;
+                
+                this.currentQuestion = 0;
+                this.score = 0;
+                this.questions = [];
+                this.userAnswers = [];
+                this.timeLeft = this.timeLimit;
+                this.isGameActive = true;
+                this.questionTimes = [];
+                
+                this.generateQuestions();
+                this.updateDisplay();
+                this.startTimer();
+                
+                this.elements.startBtn.style.display = 'none';
+                this.elements.submitBtn.style.display = 'inline-block';
+                this.elements.skipBtn.style.display = 'none';
+                
+                this.questionStartTime = Date.now();
+                this.showQuestion();
+            }
+
+            generateQuestions() {
+                for (let i = 0; i < this.questionCount; i++) {
+                    let a, b, answer, operation;
+                    let valid = false;
+                    
+                    while (!valid) {
+                        operation = ['+', '-', '×', '÷'][Math.floor(Math.random() * 4)];
+                        
+                        switch (operation) {
+                            case '+':
+                                // 至少一个两位数，且结果不超过100
+                                a = Math.floor(Math.random() * 90) + 10; // 两位数
+                                b = Math.floor(Math.random() * (100 - a)) + 1;
+                                // 确保至少有一个两位数
+                                if (a < 10 && b < 10) {
+                                    b = Math.floor(Math.random() * 90) + 10; // 两位数
+                                    if (a + b > 100) continue;
+                                }
+                                answer = a + b;
+                                break;
+                            case '-':
+                                // 被减数至少为两位数，且结果为正
+                                a = Math.floor(Math.random() * 90) + 10; // 两位数
+                                b = Math.floor(Math.random() * (a - 1)) + 1;
+                                answer = a - b;
+                                break;
+                            case '×':
+                                // 至少一个两位数，且结果不超过100
+                                a = Math.floor(Math.random() * 9) + 1; // 1-9
+                                b = Math.floor(Math.random() * 9) + 1; // 1-9
+                                // 确保至少一个两位数
+                                if (Math.random() < 0.5) {
+                                    a = Math.floor(Math.random() * 9) + 2; // 2-10，确保结果不超过100
+                                    b = Math.floor(Math.random() * Math.floor(100 / a)) + 1;
+                                } else {
+                                    b = Math.floor(Math.random() * 9) + 2; // 2-10，确保结果不超过100
+                                    a = Math.floor(Math.random() * Math.floor(100 / b)) + 1;
+                                }
+                                answer = a * b;
+                                if (answer > 100) continue;
+                                break;
+                            case '÷':
+                                // 除数至少为两位数，且结果为整数
+                                b = Math.floor(Math.random() * 9) + 1; // 1-9
+                                answer = Math.floor(Math.random() * 9) + 1; // 1-9
+                                a = b * answer;
+                                
+                                // 确保被除数为两位数
+                                if (a < 10) {
+                                    answer = Math.floor(Math.random() * 9) + 2; // 2-10
+                                    b = Math.floor(Math.random() * Math.floor(100 / answer)) + 1;
+                                    a = b * answer;
+                                    if (a > 100) continue;
+                                }
+                                
+                                // 确保至少一个两位数
+                                if (a < 10 && b < 10 && answer < 10) {
+                                    a = Math.floor(Math.random() * 90) + 10; // 两位数
+                                    answer = Math.floor(Math.random() * 9) + 1;
+                                    if (a % answer !== 0) continue;
+                                    b = a / answer;
+                                    if (b > 100) continue;
+                                }
+                                break;
+                        }
+                        
+                        // 验证至少有一个两位数
+                        if (a >= 10 || b >= 10 || answer >= 10) {
+                            valid = true;
+                        }
+                    }
+                    
+                    const question = { a, b, operation, answer };
+                    const options = this.generateOptions(answer);
+                    
+                    this.questions.push({
+                        question,
+                        options,
+                        correctAnswer: answer
+                    });
+                }
+            }
+
+            generateOptions(correctAnswer) {
+                const options = [correctAnswer];
+                while (options.length < 3) {
+                    let wrongAnswer;
+                    if (Math.random() < 0.5) {
+                        wrongAnswer = correctAnswer + Math.floor(Math.random() * 10) + 1;
+                    } else {
+                        wrongAnswer = Math.max(0, correctAnswer - Math.floor(Math.random() * 10) - 1);
+                    }
+                    
+                    if (!options.includes(wrongAnswer) && wrongAnswer !== correctAnswer) {
+                        options.push(wrongAnswer);
+                    }
+                }
+                
+                // 打乱选项顺序
+                for (let i = options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [options[i], options[j]] = [options[j], options[i]];
+                }
+                
+                return options;
+            }
+
+            startTimer() {
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this.timeLeft--;
+                    this.elements.timer.textContent = this.timeLeft;
+                    
+                    if (this.timeLeft <= 0) {
+                        this.endGame();
+                    }
+                }, 1000);
+            }
+
+            showQuestion() {
+                if (this.currentQuestion >= this.questions.length) {
+                    this.endGame();
+                    return;
+                }
+                
+                const current = this.questions[this.currentQuestion];
+                const { a, b, operation } = current.question;
+                
+                this.elements.question.textContent = `${a} ${operation} ${b} = ?`;
+                this.elements.progress.textContent = `第${this.currentQuestion + 1}题/共${this.questionCount}题`;
+                
+                this.renderOptions(current.options);
+                this.clearFeedback();
+                
+                // 记录当前题目开始时间
+                this.questionStartTime = Date.now();
+            }
+
+            renderOptions(options) {
+                this.elements.options.innerHTML = '';
+                options.forEach((option, index) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'answer';
+                    radio.id = `option${index}`;
+                    radio.value = option;
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `option${index}`;
+                    label.textContent = option;
+                    
+                    optionDiv.appendChild(radio);
+                    optionDiv.appendChild(label);
+                    this.elements.options.appendChild(optionDiv);
+                });
+            }
+
+            submitAnswer() {
+                const selectedOption = document.querySelector('input[name="answer"]:checked');
+                if (!selectedOption) {
+                    this.showFeedback('请选择一个答案！', 'incorrect');
+                    return;
+                }
+                
+                // 计算当前题目的答题时间
+                const questionTime = (Date.now() - this.questionStartTime) / 1000;
+                this.questionTimes.push(questionTime);
+                
+                const userAnswer = parseInt(selectedOption.value);
+                const correctAnswer = this.questions[this.currentQuestion].correctAnswer;
+                const isCorrect = userAnswer === correctAnswer;
+                
+                this.userAnswers.push({
+                    question: this.questions[this.currentQuestion],
+                    userAnswer: userAnswer,
+                    isCorrect: isCorrect,
+                    time: questionTime
+                });
+                
+                if (isCorrect) {
+                    this.score += 10;
+                    this.playCorrectSound();
+                    this.showFeedback('答对了! 🎉', 'correct');
+                    
+                    // 更新最短答题时间
+                    if (this.bestTime === null || questionTime < this.bestTime) {
+                        this.bestTime = questionTime;
+                    }
+                    
+                    // 答对后0.1秒自动跳转到下一题
+                    setTimeout(() => {
+                        this.nextQuestion();
+                    }, 100);
+                } else {
+                    this.playIncorrectSound();
+                    this.showFeedback(`答错了! 正确答案是 ${correctAnswer}`, 'incorrect');
+                    
+                    // 答错后显示跳过按钮
+                    this.elements.submitBtn.style.display = 'none';
+                    this.elements.skipBtn.style.display = 'inline-block';
+                }
+                
+                this.elements.score.textContent = `得分: ${this.score}`;
+            }
+
+            skipQuestion() {
+                // 计算当前题目的答题时间
+                const questionTime = (Date.now() - this.questionStartTime) / 1000;
+                this.questionTimes.push(questionTime);
+                
+                // 记录未答题目
+                this.userAnswers.push({
+                    question: this.questions[this.currentQuestion],
+                    userAnswer: null,
+                    isCorrect: false,
+                    time: questionTime
+                });
+                
+                this.nextQuestion();
+            }
+
+            nextQuestion() {
+                this.currentQuestion++;
+                if (this.currentQuestion >= this.questionCount) {
+                    this.endGame();
+                } else {
+                    this.showQuestion();
+                    this.elements.submitBtn.style.display = 'inline-block';
+                    this.elements.skipBtn.style.display = 'none';
+                }
+            }
+
+            endGame() {
+                this.isGameActive = false;
+                clearInterval(this.timer);
+                
+                this.showResults();
+                this.playEndSound();
+            }
+
+            showResults() {
+                this.elements.gameArea.style.display = 'none';
+                this.elements.results.style.display = 'block';
+                
+                this.renderResultList();
+                this.showEncouragement();
+                this.showStatistics();
+            }
+
+            showStatistics() {
+                // 计算统计数据
+                const correctCount = this.userAnswers.filter(item => item.isCorrect).length;
+                const incorrectCount = this.userAnswers.filter(item => !item.isCorrect && item.userAnswer !== null).length;
+                
+                // 计算平均答题时间
+                let avgTime = 0;
+                if (this.questionTimes.length > 0) {
+                    const totalTime = this.questionTimes.reduce((sum, time) => sum + time, 0);
+                    avgTime = (totalTime / this.questionTimes.length).toFixed(2);
+                }
+                
+                // 显示统计数据
+                this.elements.correctCount.textContent = correctCount;
+                this.elements.incorrectCount.textContent = incorrectCount;
+                this.elements.avgTime.textContent = avgTime;
+                
+                if (this.bestTime !== null) {
+                    this.elements.bestTime.textContent = this.bestTime.toFixed(2);
+                } else {
+                    this.elements.bestTime.textContent = '-';
+                }
+            }
+
+            renderResultList() {
+                this.elements.resultList.innerHTML = '';
+                
+                this.userAnswers.forEach((item, index) => {
+                    const resultDiv = document.createElement('div');
+                    const { a, b, operation, answer } = item.question.question;
+                    const questionText = `${a} ${operation} ${b} = ${answer}`;
+                    
+                    if (item.isCorrect) {
+                        resultDiv.className = 'result-item result-correct';
+                        resultDiv.innerHTML = `
+                            <strong>第${index + 1}题:</strong> ${questionText}<br>
+                            ✓ 正确! (用时: ${item.time.toFixed(2)}秒)
+                        `;
+                    } else if (item.userAnswer !== null) {
+                        resultDiv.className = 'result-item result-incorrect';
+                        resultDiv.innerHTML = `
+                            <strong>第${index + 1}题:</strong> ${questionText}<br>
+                            ✗ 你的答案: ${item.userAnswer} (用时: ${item.time.toFixed(2)}秒)
+                        `;
+                    } else {
+                        resultDiv.className = 'result-item result-unanswered';
+                        resultDiv.innerHTML = `
+                            <strong>第${index + 1}题:</strong> ${questionText}<br>
+                            {?} 未作答 (用时: ${item.time.toFixed(2)}秒)
+                        `;
+                    }
+                    
+                    this.elements.resultList.appendChild(resultDiv);
+                });
+            }
+
+            showEncouragement() {
+                let message, className;
+                
+                if (this.score >= 80) {
+                    message = '太棒了! 数学小天才! 🌟';
+                    className = 'excellent';
+                    this.createConfetti();
+                } else if (this.score >= 60) {
+                    message = '不错哦! 继续加油! 💪';
+                    className = 'good';
+                } else {
+                    message = '继续努力! 你会更棒的! 🌈';
+                    className = 'average';
+                }
+                
+                this.elements.encouragement.textContent = message;
+                this.elements.encouragement.className = `encouragement ${className}`;
+            }
+
+            continueChallenge() {
+                // 重置游戏状态
+                this.elements.results.style.display = 'none';
+                this.elements.gameArea.style.display = 'block';
+                
+                // 重置按钮状态
+                this.elements.startBtn.style.display = 'none';
+                this.elements.submitBtn.style.display = 'inline-block';
+                this.elements.skipBtn.style.display = 'none';
+                
+                this.startGame();
+            }
+
+            createConfetti() {
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + 'vw';
+                        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                        confetti.style.animationDelay = Math.random() * 2 + 's';
+                        document.body.appendChild(confetti);
+                        
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 3000);
+                    }, i * 100);
+                }
+            }
+
+            showFeedback(text, type) {
+                this.elements.feedback.textContent = text;
+                this.elements.feedback.className = `feedback ${type}`;
+                
+                setTimeout(() => {
+                    this.clearFeedback();
+                }, 3000);
+            }
+
+            clearFeedback() {
+                this.elements.feedback.textContent = '';
+                this.elements.feedback.className = 'feedback';
+            }
+
+            playCorrectSound() {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                
+                oscillator.frequency.setValueAtTime(800, context.currentTime);
+                oscillator.frequency.setValueAtTime(1000, context.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+                
+                oscillator.start(context.currentTime);
+                oscillator.stop(context.currentTime + 0.3);
+            }
+
+            playIncorrectSound() {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                
+                oscillator.frequency.setValueAtTime(200, context.currentTime);
+                oscillator.frequency.setValueAtTime(100, context.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+                
+                oscillator.start(context.currentTime);
+                oscillator.stop(context.currentTime + 0.5);
+            }
+
+            playEndSound() {
+                const context = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                
+                const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C-E-G-C
+                
+                frequencies.forEach((freq, i) => {
+                    oscillator.frequency.setValueAtTime(freq, context.currentTime + i * 0.2);
+                });
+                
+                gainNode.gain.setValueAtTime(0.3, context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 1);
+                
+                oscillator.start(context.currentTime);
+                oscillator.stop(context.currentTime + 1);
+            }
+
+            updateDisplay() {
+                this.elements.timer.textContent = this.timeLeft;
+                this.elements.score.textContent = `得分: ${this.score}`;
+            }
+        }
+
+        // 初始化游戏
+        document.addEventListener('DOMContentLoaded', () => {
+            new MathGame();
+        });
+    </script>
+</body>
+</html>
